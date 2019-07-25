@@ -191,7 +191,7 @@ exports["default"] = Ember.Object.extend(Ember.Evented, {
 
   }.on('connect'),
   find: function (type, id) {
-    type = type.pluralize()
+    type = Ember.pluralize(type)
     var store = this;
     return this.checkConnection()
       .then(function(){
@@ -204,9 +204,9 @@ exports["default"] = Ember.Object.extend(Ember.Evented, {
   },
   createRecord: function (type, data) {
     var ref, path;
-    path =  (ref = this._getPathForType(type)) ? ref : type.pluralize()
+    path =  (ref = this._getPathForType(type)) ? ref : Ember.pluralize(type)
     path = this._getPrefix(type) + path;
-    type = type.pluralize()
+    type = Ember.pluralize(type)
     var store = this;
     return store.checkConnection()
       .then(function(){
@@ -224,7 +224,7 @@ exports["default"] = Ember.Object.extend(Ember.Evented, {
       });
   },
   deleteRecord : function(type, id) {
-    var cache = this._cacheFor(type.pluralize());
+    var cache = this._cacheFor(Ember.pluralize(type));
     var model = cache.findBy('id', id);
     var doc = model.get('doc');
     return new Promise(function (resolve, reject) {
@@ -238,7 +238,7 @@ exports["default"] = Ember.Object.extend(Ember.Evented, {
     })
   },
   findAndSubscribeQuery: function(type, query) {
-    type = type.pluralize()
+    type = Ember.pluralize(type)
     var store = this;
     var prefix = this._getPrefix(type);
     //store.cache[type] = []
@@ -276,7 +276,7 @@ exports["default"] = Ember.Object.extend(Ember.Evented, {
   },
   findRecord: function (type, id) {
     var store = this;
-    var cache = store.cache[type.pluralize()]
+    var cache = store.cache[Ember.pluralize(type)]
     return ObjectPromiseProxy.create ({
       promise: new Promise(function (resolve, reject){
         try {
@@ -313,12 +313,12 @@ exports["default"] = Ember.Object.extend(Ember.Evented, {
     // })
   },
   findQuery: function (type, query) {
-    // type = type.pluralize()
+    // type = Ember.pluralize(type)
     var ref, path;
-    path =  (ref = this._getPathForType(type)) ? ref : type.pluralize()
+    path =  (ref = this._getPathForType(type)) ? ref : Ember.pluralize(type)
     path = this._getPrefix(type) + path;
     var store = this;
-    //store.cache[type.pluralize()] = []
+    //store.cache[Ember.pluralize(type)] = []
     return this.checkConnection()
     .then(function(){
       return new Promise(function (resolve, reject) {
@@ -333,12 +333,12 @@ exports["default"] = Ember.Object.extend(Ember.Evented, {
     });
   },
   findAll: function (type, query) {
-    type = type.pluralize()
+    type = Ember.pluralize(type)
     throw new Error('findAll not implemented');
     // TODO this.connection subscribe style query
   },
   _cacheFor: function (type) {
-    type = type.pluralize()
+    type = Ember.pluralize(type)
     var cache = this.cache[type];
     if (cache === undefined) {
       this.cache[type] = cache = [];
@@ -346,12 +346,12 @@ exports["default"] = Ember.Object.extend(Ember.Evented, {
     return cache;
   },
   _getPathForType: function (type) {
-    var Adapter = this.container.lookupFactory('adapter:' + type.singularize());
+    var Adapter = this.container.lookupFactory('adapter:' + Ember.singularize(type));
     if (Adapter)
       return Adapter.create().pathForType(type);
   },
   _getPrefix: function (type) {
-    var Adapter = this.container.lookupFactory('adapter:' + type.singularize());
+    var Adapter = this.container.lookupFactory('adapter:' + Ember.singularize(type));
     var prefix;
     if (Adapter)
       prefix = Adapter.create().get('prefix');
@@ -361,11 +361,11 @@ exports["default"] = Ember.Object.extend(Ember.Evented, {
   _factoryFor: function (type) {
     var ref;
     var modelStr = (ref = this.get('modelStr')) ? ref : 'model-sdb'
-    return this.container.lookupFactory(modelStr + ':'+ type.singularize());
+    return this.container.lookupFactory(modelStr + ':'+ Ember.singularize(type));
   },
   _createModel: function (type, doc) {
     var modelClass = this._factoryFor(type);
-    type = type.pluralize()
+    type = Ember.pluralize(type)
     if(modelClass)
     {
       var model = modelClass.create({
@@ -381,7 +381,7 @@ exports["default"] = Ember.Object.extend(Ember.Evented, {
     }
   },
   _resolveModel: function (type, doc) {
-    var cache = this._cacheFor(type.pluralize());
+    var cache = this._cacheFor(Ember.pluralize(type));
     var id = Ember.get(doc, 'id') || Ember.get(doc, '_id');
     var model = cache.findBy('id', id);
     if (model !== undefined) {
@@ -393,9 +393,9 @@ exports["default"] = Ember.Object.extend(Ember.Evented, {
     });
   },
   _resolveModels: function (type, docs) {
-    // type = type.pluralize()
+    // type = Ember.pluralize(type)
     var store = this;
-    var cache = this._cacheFor(type.pluralize());
+    var cache = this._cacheFor(Ember.pluralize(type));
     var models = [];
     var promises = [];
     for (var i=0; i<docs.length; i++) {
@@ -441,7 +441,7 @@ exports["default"] = Ember.Object.extend(Ember.Evented, {
     return this
   },
   unload: function (type, doc) {
-    type = type.pluralize();
+    type = Ember.pluralize(type);
     var cache = this._cacheFor(type);
     try {
       doc.get('doc').destroy()
@@ -454,7 +454,7 @@ exports["default"] = Ember.Object.extend(Ember.Evented, {
   unloadAll: function (type) {
     try
       {
-        var cache = this.cache[type.pluralize()];
+        var cache = this.cache[Ember.pluralize(type)];
         for (var i = 0; i < cache.length; i++) {
           var doc = cache[i];
           doc.get('doc').destroy();
@@ -467,7 +467,7 @@ exports["default"] = Ember.Object.extend(Ember.Evented, {
     }
   },
   peekAll: function (type) {
-    type = type.pluralize()
+    type = Ember.pluralize(type)
     return this._cacheFor(type);
   },
   /* returns Promise for when sharedb doc is subscribed */
