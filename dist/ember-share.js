@@ -1430,21 +1430,21 @@ define("ember-share/store",
             } catch (e) { console.log(e) }
             if (cachedRecordAvailable) {
               console.log('cachedRecordAvailable is good', cache[0]);
-              resolve(cache[0])
+              return resolve(cache[0])
             } else {
               store.findQuery(type, {_id: id})
                 .then(function(results){
-                  console.log('store.findquery', results[0]);
                   if(results) {
-                    resolve(results[0]);
+                    console.log('resolved results[0]');
+                    return resolve(results[0]);
                   }
                   else {
-                    reject('');
+                    console.log('rejected first');
+                    return reject('');
                   }
-                  resolve(results[0])
                 })
                 .catch(function (err){
-                  console.log('rejected');
+                  console.log('rejected second');
                   reject(err)
                 });
             }
