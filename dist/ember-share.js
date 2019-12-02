@@ -1429,13 +1429,16 @@ define("ember-share/store",
               var cachedRecordAvailable = cache[0].doc.id == id && cache.length == 1
             } catch (e) { console.log(e) }
             if (cachedRecordAvailable) {
+              console.log('cachedRecordAvailable is good', cache[0]);
               resolve(cache[0])
             } else {
               store.findQuery(type, {_id: id})
                 .then(function(results){
+                  console.log('store.findquery', results[0]);
                   resolve(results[0])
                 })
                 .catch(function (err){
+                  console.log('rejected');
                   reject(err)
                 });
             }
