@@ -1427,7 +1427,7 @@ define("ember-share/store",
           promise: new Promise(function (resolve, reject){
             try {
               var cachedRecordAvailable = cache[0].doc.id == id && cache.length == 1
-            } catch (e) { }
+            } catch (e) { console.log(e) }
             if (cachedRecordAvailable) {
               resolve(cache[0])
             } else {
@@ -1592,7 +1592,7 @@ define("ember-share/store",
         try {
           doc.get('doc').destroy()
         } catch (e) {
-
+          console.log(e);
         }
         doc.destroy()
         cache.removeObject(doc)
@@ -1609,7 +1609,7 @@ define("ember-share/store",
             cache.removeObjects(cache);
           }
         catch (err){
-
+          console.log(err)
         }
       },
       peekAll: function (type) {
