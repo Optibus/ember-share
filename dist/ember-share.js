@@ -1435,6 +1435,12 @@ define("ember-share/store",
               store.findQuery(type, {_id: id})
                 .then(function(results){
                   console.log('store.findquery', results[0]);
+                  if(results) {
+                    resolve(results[0]);
+                  }
+                  else {
+                    reject('');
+                  }
                   resolve(results[0])
                 })
                 .catch(function (err){
