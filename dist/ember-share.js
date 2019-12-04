@@ -1609,7 +1609,7 @@ define("ember-share/store",
         doc.destroy()
         cache.removeObject(doc)
       },
-      unloadAll: function (type, cb) {
+      unloadAll: async function (type) {
         try
           {
             var promises = []
@@ -1621,10 +1621,8 @@ define("ember-share/store",
               });
               promises.push(p);
             }
-            return Promise.all(promises).then(() => {
-              cache.removeObjects(cache);
-              if(typeof cb === 'function') return cb();
-            });
+            await Promise.all(promises);
+            cache.removeObjects(cache);
           }
         catch (err){
           console.log(err);
