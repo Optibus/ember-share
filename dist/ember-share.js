@@ -1409,6 +1409,7 @@ define("ember-share/store",
             });
             _query.on('remove', function (docs) {
               store._resolveModels(type, docs).then(function (models) {
+                  _.forEach(models, function (model) {
                     store.unload(type, model);
                   });
                   return fetchedResult.removeObjects(models);
