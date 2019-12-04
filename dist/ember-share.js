@@ -1617,11 +1617,13 @@ define("ember-share/store",
             for (var i = 0; i < cache.length; i++) {
               var p = new Promise((resolve) => {
                 var doc = cache[i];
-                doc.get('doc').destroy(() => doc.destroy(() => {
-                    console.log('resolve number', i);
+                doc.get('doc').destroy(() => {
+                  console.log('outer resolve number', i);
+                  doc.destroy(() => {
+                    console.log('inner resolve number', i);
                     resolve();
-                  })
-                );
+                  });
+                });
               });
               promises.push(p);
             }
