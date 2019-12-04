@@ -1591,10 +1591,9 @@ define("ember-share/store",
       unloadRecord(doc, cb) {
         let cache = this.cache[doc.get('_type')];
         doc.get('doc').destroy(() => { 
-          doc.destroy(() => {
-            cache.removeObject(doc);
-            if (typeof cb === 'function') return cb();
-          }); 
+          cache.removeObject(doc);
+          doc.destroy();
+          if (typeof cb === 'function') return cb();
         });
         return this;
       },
@@ -1606,8 +1605,8 @@ define("ember-share/store",
         } catch (e) {
           console.log(e);
         }
-        doc.destroy()
         cache.removeObject(doc)
+        doc.destroy();
       },
       unloadAll: async function (type) {
         try
@@ -1619,10 +1618,8 @@ define("ember-share/store",
                 var doc = cache[i];
                 doc.get('doc').destroy(() => {
                   console.log('outer resolve number', i);
-                  doc.destroy(() => {
-                    console.log('inner resolve number', i);
-                    resolve();
-                  });
+                  doc.destroy();
+                  resolve();
                 });
               });
               promises.push(p);
