@@ -1593,7 +1593,7 @@ define("ember-share/store",
         doc.get('doc').destroy(() => { 
           doc.destroy(() => {
             cache.removeObject(doc);
-            if (typeof cb === 'function') cb();
+            if (typeof cb === 'function') return cb();
           }); 
         });
         return this;
@@ -1621,9 +1621,9 @@ define("ember-share/store",
               });
               promises.push(p);
             }
-            Promise.all(promises).then(() => {
+            return Promise.all(promises).then(() => {
               cache.removeObjects(cache);
-              if(typeof cb === 'function') cb();
+              if(typeof cb === 'function') return cb();
             });
           }
         catch (err){
