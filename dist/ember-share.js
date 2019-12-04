@@ -301,7 +301,7 @@ define("ember-share/models/base",
             delete op.od;
 
           if (op.oi != op.od) {
-            this.get('doc').submitOp([op], function(err) {
+            this.get('doc').submitOp(op, function(err) {
               self.get('_root', true).trigger('submitted', err);
             });
           }
