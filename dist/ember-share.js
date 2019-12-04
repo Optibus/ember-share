@@ -439,15 +439,13 @@ define("ember-share/models/model",
         this.set('oldDoc', doc);
       }).observes('doc').on('init'),
 
-
       willDestroy() {
-        console.log('willdestroy doc', this.get('doc'))
-        if(this.get('doc')) {
-          const utils = Utils(this);
-          this.get('doc').destroy();
-          this._super.apply(this, arguments);
-          utils.removeChildren();
-          console.log('destroying children');
+        if (this.get('doc')) {
+          this.get('doc').destroy(() => {
+            const utils = Utils(this);
+            this._super.apply(this, arguments);
+            utils.removeChildren();
+          });
         }
       },
 
@@ -1411,7 +1409,6 @@ define("ember-share/store",
             });
             _query.on('remove', function (docs) {
               store._resolveModels(type, docs).then(function (models) {
-                  _.forEach(models, function (model) {
                     store.unload(type, model);
                   });
                   return fetchedResult.removeObjects(models);
