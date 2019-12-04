@@ -1588,12 +1588,15 @@ define("ember-share/store",
           });
         });
       },
-      unloadRecord: function (doc) {
-        var cache = this.cache[doc.get("_type")];
-        doc.get('doc').destroy();
-        doc.destroy();
-        cache.removeObject(doc);
-        return this
+      unloadRecord(doc, cb) {
+        let cache = this.cache[doc.get('_type')];
+        doc.get('doc').destroy(() => { 
+          doc.destroy(() => {
+            cache.removeObject(doc);
+            if (typeof cb === 'function') cb();
+          }); 
+        });
+        return this;
       },
       unload: function (type, doc) {
         type = type.pluralize();
@@ -1606,19 +1609,25 @@ define("ember-share/store",
         doc.destroy()
         cache.removeObject(doc)
       },
-      unloadAll: function (type) {
+      unloadAll: function (type, cb) {
         try
           {
+            var promises = []
             var cache = this.cache[type.pluralize()];
             for (var i = 0; i < cache.length; i++) {
-              var doc = cache[i];
-              doc.get('doc').destroy();
-              doc.destroy();
+              var p = new Promise((resolve) => {
+                var doc = cache[i];
+                doc.get('doc').destroy(() => doc.destroy(resolve));
+              });
+              promises.push(p);
             }
-            cache.removeObjects(cache);
+            Promise.all(promises).then(() => {
+              cache.removeObjects(cache);
+              if(typeof cb === 'function') cb();
+            });
           }
         catch (err){
-          console.log(err)
+          console.log(err);
         }
       },
       peekAll: function (type) {
