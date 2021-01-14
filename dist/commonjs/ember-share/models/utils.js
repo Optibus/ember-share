@@ -208,7 +208,9 @@ exports["default"] = function (context) {
 
                   if (op.od && op.oi == null) {
                     context.notifyPropertyChange(utils.prefixToChildLimiations(newP.join('.')));
-                    context.removeKey(_.head(newP));
+                    if (newP.length === 1) {
+                      context.removeKey(_.head(newP));
+                    }
                   } else {
                     context[`property${didWill}Change`](utils.prefixToChildLimiations(newP.join('.')));
                   }

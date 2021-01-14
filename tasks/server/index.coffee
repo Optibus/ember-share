@@ -28,11 +28,13 @@ module.exports =
 
     app.post '/op', (req, res) ->
       {id, op, collection} = req.body
+      console.log req.body
       doc = SDBConnection.get collection, id
       doc.fetch (err) ->
         return res.send errorFetch: err if err?
         try
           doc.submitOp [op], (err) ->
+            console.log(doc.data.events)
 
           if err?
             res.send errorSubmit: err

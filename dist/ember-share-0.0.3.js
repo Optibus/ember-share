@@ -835,10 +835,10 @@ define("ember-share/models/model",
           oldDoc.destroy();
         }
 
-        // doc.on('before op', utils.beforeAfter('Will'));
+         //doc.on('before op', utils.beforeAfter('Will'));
         doc.on('before component', utils.beforeAfter('Will'));
         doc.on('after component', utils.beforeAfter('Did'));
-        // doc.on('op', utils.beforeAfter('Did'));
+         //doc.on('op', utils.beforeAfter('Did'));
 
         this.set('oldDoc', doc);
       }).observes('doc').on('init'),
@@ -1510,7 +1510,9 @@ define("ember-share/models/utils",
 
                       if (op.od && op.oi == null) {
                         context.notifyPropertyChange(utils.prefixToChildLimiations(newP.join('.')));
-                        context.removeKey(_.head(newP));
+                        if (newP.length === 1) {
+                          context.removeKey(_.head(newP));
+                        }
                       } else {
                         context[`property${didWill}Change`](utils.prefixToChildLimiations(newP.join('.')));
                       }
