@@ -6,3 +6,7 @@
 test/tests.js
 tags
 tags.*
+report.json
+/test/js/server/public/primus.js
+/test/js/server/public/share-client.js
+
