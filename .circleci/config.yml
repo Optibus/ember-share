@@ -5,6 +5,7 @@ jobs:
       - image: cimg/node:14.10.1
     steps:
       - checkout
+      - run: npm install
       - run: npm run test:headless
       - store_test_results:
           path: './results.json'
