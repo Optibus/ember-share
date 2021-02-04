@@ -30,9 +30,9 @@
     "ws": "^1.1.1"
   },
   "scripts": {
-    "build": "npx webpack --config webpack-app.config.js",
+    "build": "DEVELOPMENT=true npx webpack --config webpack-app.config.js",
     "dev": "DEVELOPMENT=true npx webpack --config webpack-app.config.js",
-    "test:headless": "node headless-runner.js",
+    "test:headless": "node headles-runner.js",
     "test:webpack": "npx webpack --config webpack-test.config.js",
     "eslint:lib": "npx eslint lib",
     "eslint:test": "npx eslint test/js"

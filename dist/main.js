@@ -1,1 +1,2617 @@
-(()=>{"use strict";var e={d:(t,n)=>{for(var i in n)e.o(n,i)&&!e.o(t,i)&&Object.defineProperty(t,i,{enumerable:!0,get:n[i]})},o:(e,t)=>Object.prototype.hasOwnProperty.call(e,t),r:e=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})}},t={};function n(){return"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,(function(e){const t=16*Math.random()|0;return("x"===e?t:3&t|8).toString(16)}))}function i(e){return{newPos:e.newPos,components:e.components.slice(0)}}e.r(t),e.d(t,{Hg:()=>s,M8:()=>n,_X:()=>o});const r=function(e){this.ignoreWhitespace=e};function o(){const e={};e[window.Primus.CLOSED]="disconnected",e[window.Primus.OPENING]="connecting",e[window.Primus.OPEN]="connected",window.sharedb.Connection.prototype.bindToSocket=function(t){const n=this;function i(t){const i=e[t];n._setState(i)}this.state=0===t.readyState||1===t.readyState?"connecting":"disconnected",i(Primus.OPENING),i(t.readyState),this.canSend="connected"===this.state,this.socket={send(e){t.write(e)}},t.on("data",(function(e){if(e.a)try{n.handleMessage(e)}catch(e){throw n.emit("error",e),e}})),t.on("readyStateChange",(function(){i(t.readyState)})),t.on("reconnecting",(function(){"disconnected"===n.state&&(i(Primus.OPENING),n.canSend=!1)}))}}r.prototype={diff(e,t){if(t===e)return[{value:t}];if(!t)return[{value:e,removed:!0}];if(!e)return[{value:t,added:!0}];t=this.tokenize(t),e=this.tokenize(e);const n=t.length,r=e.length,o=n+r,s=[{newPos:-1,components:[]}];let c=this.extractCommon(s[0],t,e,0);if(s[0].newPos+1>=n&&c+1>=r)return s[0].components;for(let l=1;l<=o;l++)for(let o=-1*l;o<=l;o+=2){var h;const l=s[o-1],u=s[o+1];c=(u?u.newPos:0)-o,l&&(s[o-1]=void 0);const a=l&&l.newPos+1<n,d=u&&c>=0&&c<r;if(a||d){if(!a||d&&l.newPos<u.newPos?(h=i(u),this.pushComponent(h.components,e[c],void 0,!0)):((h=i(l)).newPos++,this.pushComponent(h.components,t[h.newPos],!0,void 0)),c=this.extractCommon(h,t,e,o),h.newPos+1>=n&&c+1>=r)return h.components;s[o]=h}else s[o]=void 0}},pushComponent(e,t,n,i){const r=e[e.length-1];r&&r.added===n&&r.removed===i?e[e.length-1]={value:this.join(r.value,t),added:n,removed:i}:e.push({value:t,added:n,removed:i})},extractCommon(e,t,n,i){const r=t.length,o=n.length;let{newPos:s}=e,c=s-i;for(;s+1<r&&c+1<o&&this.equals(t[s+1],n[c+1]);)s++,c++,this.pushComponent(e.components,t[s],void 0,void 0);return e.newPos=s,c},equals(e,t){const n=/\S/;return!(!this.ignoreWhitespace||n.test(e)||n.test(t))||e===t},join:(e,t)=>e+t,tokenize:e=>e},Array.isArray;const s=new r(!1);function c(e){return{isOpOnArray:e=>null!=e.ld||null!=e.lm||null!=e.li,matchingPaths(e,t){let n=0;const i=e.length>t.length?e.length:t.length;for(;("*"==e[n]||e[n]==t[n])&&n<i;)n+=1;return n-e.length/1e3},matchChildToLimitations(t){const n=Ember.get(e,"_root._childLimiations");let i=Ember.get(e,"_prefix");null==i||t.match(i)?i=t:i+=`.${t}`,i=i.split(".");const r=this;return _.some(n,(e=>{const t=e.split("/");return i.length==t.length&&Math.ceil(r.matchingPaths(t,i))==i.length}))},prefixToChildLimiations(t){const n=Ember.get(e,"_root._childLimiations");let i=Ember.get(e,"_prefix");null==i||t.match(i)?i=t:i+=`.${t}`,i=i.split(".");const r=this;let o;const s=this.findMaxIndex(o=_.map(n,(e=>{const t=e.split("/"),n=Math.ceil(r.matchingPaths(t,i));return n<t.length?0:n})));if(s>=0&&o[s]>0){const t=n[s].split("/");let o;const c=i.slice(0,Math.ceil(r.matchingPaths(t,i)));return(o=Ember.get(e,"_prefix"))?(o=o.split("."),c.slice(o.length).join(".")):c.join(".")}return t},removeChildren(t,n){const i=Ember.get(e,"_children");let r=Object.keys(i);const o=e.get("_prefix");null!=o&&t&&0!=t.indexOf(o)&&(t=`${o}.${t}`),t&&(r=_.reduce(r,((e,i)=>(i==t?n&&e.push(i):0==i.indexOf(t)&&e.push(i),e)),[])),_.forEach(r,(e=>{i[e].removeListeners(),i[e].destroy(),delete i[e]}))},comparePathToPrefix(e,t){return Boolean(Math.ceil(this.matchingPaths(e.split("."),t.split("."))))},cutLast(e,t){let n;return this.isOpOnArray(t)&&!isNaN(+_.last(e))&&(n=_.clone(e),n.pop()),n||e},comparePathToChildren(t,n){const i=this,r=Ember.get(e,"_children"),o=Object.keys(r),s=_.some(o,(e=>{const r=i.matchingPaths(e.split("."),i.cutLast(t,n));return Math.ceil(r)==e.split(".").length}));return!Ember.isEmpty(o)&&s},triggerChildren(t,n,i){_.clone(n.p);const r=e.get("_children"),o=Object.keys(r);if(Ember.isEmpty(o))return;const s=this,c=_.mapKeys(r,((e,t)=>s.isOpOnArray(n)&&!isNaN(+_.last(t.split(".")))?0:s.matchingPaths(s.cutLast(t.split("."),n),s.cutLast(n.p,n)))),h=c[_.max((l=Object.keys(c),_.map(l,(e=>+e))))];var l;"Will"==t&&h.trigger("before op",[n],i),"Did"==t&&h.trigger("op",[n],i)},beforeAfter(t){const n=this;let i;return function(r,o){o||_.forEach(r,(r=>{n.comparePathToChildren(r.p,r)?n.triggerChildren(t,r,o):n.isOpOnArray(r)?(i=n.extractArrayPath(r),e.get(i.p)[`arrayContent${t}Change`](i.idx,i.removeAmt,i.addAmt)):e[`property${t}Change`](n.prefixToChildLimiations(r.p.join(".")))}))}},beforeAfterChild(t){const n=this;let i,r,o;return function(s,c){null==(o=Ember.get(e,"_idx"))&&c||_.forEach(s,(s=>{if(s.p.join(".")==(r=Ember.get(e,"_prefix"))&&"Did"==t){if(null!=s.oi){const t=e.get(`_root.doc.data.${r}`);e.replaceContent(t,!0)}else if(null!=s.od){const t=r.split("."),n=t.pop();!_.isEmpty(t)&&(h=e.get(`_children.${t.join(".")}`))?h.removeKey(n):e.get("_root").propertyDidChange(r)}}else{const l=null==o?r.split("."):r.split(".").concat(String(o)),u=_.difference(s.p,l);if(n.comparePathToPrefix(s.p.join("."),r))if(n.isOpOnArray(s)&&null==Ember.get(e,"_idx")){var c=_.clone(s);c.p=u,i=n.extractArrayPath(c),""==i.p?e[`arrayContent${t}Change`](i.idx,i.removeAmt,i.addAmt):Ember.get(e,i.p)[`arrayContent${t}Change`](i.idx,i.removeAmt,i.addAmt)}else if(""==u.join(".")){if(_.isEmpty(c)&&s.od&&null==s.oi&&_.isEqual(s.od,e.toJson())){const t=l.pop();var h;_.isEmpty(l)?n.removeChildren(t,!0):(h=e.get("_children")[l.join(".")]).removeKey(t)}}else s.oi&&null==s.od&&e.addKey(_.head(u)),s.od&&null==s.oi?(e.notifyPropertyChange(n.prefixToChildLimiations(u.join("."))),1===u.length&&e.removeKey(_.head(u))):e[`property${t}Change`](n.prefixToChildLimiations(u.join(".")))}}))}},findMaxIndex:e=>e.indexOf(_.max(e)),extractArrayPath:e=>({idx:+_.last(e.p),p:_.slice(e.p,0,e.p.length-1).join("."),addAmt:void 0!==e.li?1:0,removeAmt:void 0!==e.ld?1:0})}}Ember.Mixin.create({textKeys:[],triggerEvents:!1,textEvents:function(){this._textContexts=new Array(this.textKeys.length),this._handlers=new Array(2*this._textContexts.length);for(let e=0;e<this.textKeys.length;e++){const t=this.textKeys[e],n=this._context.createContextAt([t]);this._handlers[t]=new Array(2),this._handlers[t].push(n.on("insert",Ember.run.bind(this,this.handleInsert,t))),this._handlers[t].push(n.on("delete",Ember.run.bind(this,this.handleDelete,t))),this._textContexts[t]=n}}.on("init"),setUnknownProperty(e,t){this.textKeys.indexOf(e)>=0?this.textOp(e,t):this._super(e,t)},textOp(e,t){if(void 0===this._context.get())return;this.propertyWillChange(e);const n=s.diff(this._cache[e]||"",t.replace(/\r\n/g,"\n"));this._cache[e]=t.replace(/\r\n/g,"\n");let i=0;for(let t=0;t<n.length;t++)n[t].added?this._context.insert([e,i],n[t].value):n[t].removed&&this._context.remove([e,i],n[t].value.length),i+=n[t].value.length;this.propertyDidChange(e)},handleInsert(e,t,n){this.propertyWillChange(e),void 0===this._cache[e]&&this.get(e);const i=this._cache[e].slice(0,t)+n+this._cache[e].slice(t);this._cache[e]=i,this.triggerEvents&&this.trigger("textInsert",t,n),this.propertyDidChange(e)},handleDelete(e,t,n){void 0===this._cache[e]&&this.get(e),this.propertyWillChange(e);const{length:i}=n,r=this._cache[e].slice(0,t)+this._cache[e].slice(t+i);this._cache[e]=r,this.triggerEvents&&this.trigger("textDelete",t,n),this.propertyDidChange(e)},willDestroy(){for(const e in this._textContexts)this._textContexts[e].removeListener(this._handlers[e][0]),this._textContexts[e].removeListener(this._handlers[e][1]),this._textContexts[e].destroy();this._super()}});const h={object:{},array:{}},l=Ember.Mixin.create({useSubs:function(e,t,n){if(c(this).matchChildToLimitations(t))return e;if(_.isPlainObject(e)){e={tempContent:e};var i="object"}else _.isArray(e)&&(e={content:e},i="array");if(i){let r,o;const s=null==n?t:`${t}.${n}`;let c=Ember.get(this,"_prefix");if(null!=(o=Ember.get(this,"_idx"))&&(c+=`.${o}`),s==c)return this;const l=Ember.get(this,"_children"),u=Object.keys(l);if(_.includes(u,s))return l[s];r={};let a=h[i].extend({_children:Ember.get(this,"_children"),_prefix:t,_idx:n,_sdbProps:Ember.get(this,"_sdbProps"),_root:Ember.get(this,"_root")});return a=a.create(e),r[s]=a,_.assign(Ember.get(this,"_children"),r),a}return e}}),u=function(e){return e};function a(e){return function(){let t,n;if(t={},n=null,_.forEach(arguments,(function(e){return _.isPlainObject(e)?t=e:_.isString(e)?n=e.charAt(0).toUpperCase()+e.slice(1):void 0})),null!=n&&null!=window[n])var i=function(e){const t=new window[n](e);return"Date"==n?t:t.valueOf()};else i=u;return Ember.computed({get(t){return this.get(e,!0).addObject(t),_.includes(["_isSDB","_sdbProps","_subProps","doc","_prefix","content","_idx","_root"],t)||null==this._fullPath?i(this._get(t,!0)):i(this._get(this._fullPath(t)))},set(e,t,n){const i=null==e?this.get("_prefix"):"_idx"!=e&&this._fullPath?this._fullPath(e):e;return this._set(i,t)}})}}const d=Ember.Mixin.create({_children:function(){return{}}.property(),_sdbProps:function(){return[]}.property(),_subProps:function(){return[]}.property(),doc:Ember.computed.reads("_root.doc"),createInnerAttrs:function(){const e=Ember.get(this,"tempContent"),t=this,n=a("_subProps"),i=[];_.forEach(e,(function(e,r){i.push(r),Ember.defineProperty(t,r,n())})),Ember.get(this,"_subProps").addObjects(i),delete this.tempContent}.on("init"),beforeFn:function(){return[]}.property(),afterFn:function(){return[]}.property(),activateListeners:function(){const e=c(this),t=e.beforeAfterChild("Will"),n=e.beforeAfterChild("Did");this.removeListeners(),this.on("before op",t),this.on("op",n),this.get("beforeFn").push(t),this.get("afterFn").push(n)}.observes("doc").on("init"),_fullPath(e){const t=Ember.get(this,"_prefix"),n=Ember.get(this,"_idx");return t?null!=n?`${t}.${n}.${e}`:`${t}.${e}`:e},deleteProperty(e){const t=this._super(this._fullPath(e));return this.removeKey(e),t},replaceContent(e,t){this.notifyWillProperties(this.get("_subProps").toArray());const n=this.get("_prefix"),i=this.get("_idx"),r=null==i?n:`${n}.${i}`;t||this._set(r,e);const o=this;if(c(this).removeChildren(r),_.isEmpty(Object.keys(this))){Ember.setProperties(this,{tempContent:e}),this.createInnerAttrs();var s=function(e,t){if(_.isEmpty(e))o.get("_root").notifyPropertyChange(t.join("."));else{const n=o.get._children[e.join(".")];null!=n?n.notifyPropertyChange(`${e.join(".")}.${t.join(".")}`):t.push(e.pop()),s(e,t)}};const t=n.split("."),i=t.pop();s(t,[i])}else{if(_.isPlainObject(e))var h=_.difference(Object.keys(this),Object.keys(e));else h=Object.keys(this);_.forEach(h,(function(e){delete o[e]})),this.get("_subProps").removeObjects(h),Ember.setProperties(this,{tempContent:e}),this.createInnerAttrs(),this.notifyDidProperties(this.get("_subProps").toArray())}return this},toJson(){const e=Ember.get(this,"_idx"),t=Ember.get(this,"_prefix"),n=null==e?t:`${t}.${e}`;return this.get(`doc.data.${n}`)},addKey(e){const t=a("_subProps");return this.get("_subProps").indexOf(e)>-1||Ember.defineProperty(this,e,t()),this},removeKey(e){return a("_subProps"),c(this).removeChildren(e,!0),this.get("_subProps").removeObject(e),delete this[e],this},removeListeners(){this.has("before op")&&this.off("before op",this.get("beforeFn").pop()),this.has("op")&&this.off("op",this.get("afterFn").pop())}}),p=function(e){return e.slice(0,e.length-1)},f=function(e){return null!=e&&"string"!=typeof e&&"number"!=typeof e&&"boolean"!=typeof e?"function"==typeof e.toJson?e.toJson():null==(t=e)?void 0:JSON.parse(JSON.stringify(t)):e;var t},g=Ember.Mixin.create({_get(e,t){const n=_.head(e.split("."));if("_sdbProps"!=e&&_.includes(this.get("_sdbProps"),n)){const t=this.get(`doc.data.${e}`);return this.useSubs(t,e)}return this.get(e)},_set(e,t){const n=_.first(e.split(".")),i=this;if(null==Ember.get(this,"_prefix")&&this.get(n),"_sdbProps"!=e&&_.includes(this.get("_sdbProps"),n)){const n=f(this._get(e));t=f(t);const r=e.split(".");c(this).removeChildren(e,!0);const o={p:r,od:n,oi:t};return null==n&&delete o.od,o.oi!=o.od&&this.get("doc").submitOp([o],(function(e){i.get("_root",!0).trigger("submitted",e)})),this.useSubs(t,e)}return this.set(e,t,!0)}});let m=Ember.Object.extend(Ember.Evented,g,{_isSDB:!0,notifyProperties:function(e){const t=this;return _.forEach(e,(function(e){t.notifyPropertyChange(e)})),this},notifyDidProperties:function(e){const t=this;return _.forEach(e,(function(e){t.propertyDidChange(e)})),this},notifyWillProperties:function(e){const t=this;return _.forEach(e,(function(e){t.propertyWillChange(e)})),this},deleteProperty:function(e){const t=this.get("doc"),n=e.split("."),i=f(this.get(`_root.${e}`));t.submitOp([{p:n,od:i}])},setProperties:function(e){const t=this.get("_sdbProps"),n=this,i=_.filter(_.keys(e),(function(e){return n.get(e),_.includes(t,e)})),r=_.reject(_.keys(e),(function(e){return _.includes(t,e)}));return this._super(_.pick(e,r)),_.forEach(i,(function(t){n.set(t,e[t])})),this}});m=m.extend(l),h.object=m.extend(d),h.array=function(e,t){return Ember.ArrayProxy.extend(Ember.Evented,e,t,{_isArrayProxy:!0,arrayContentDidChange(e,t,n){return(null==t?0:-1*t)+(null==n)||!n||Ember.get(this,"content").propertyDidChange("lastObject"),this._super.apply(this,arguments)},arrayContentWillChange(e,t,n){const i=Ember.get(this,"_children"),r=Object.keys(i),o=Ember.get(this,"_prefix"),s=this,h=c(this),l=function(e,t){return`${p(e.split(".")).join(".")}.${t}`},u=null==t?0:-1*t;u+(n=null==n?0:n)&&Ember.get(this,"content").propertyWillChange("lastObject");const a=_.reduce(r,(function(e,t){return p(t.split(".")).join(".")==o&&e.push(t),e}),[]);return _.forEach(a,(function(o){const c=+_.last(o.split("."));if(!isNaN(c)){const a=i[o];if(u+n==0)c>=n&&(h.removeChildren(o,!0),Ember.get(s,"content").propertyWillChange("lastObject"));else if(n&&e<=c||t&&e<c){const e=c+u+n,t=l(o,e);r.filter((function(e){return e.match(new RegExp(`^${o}\\.`))})).forEach((function(e){const n=i[e],r=e.replace(new RegExp(`^${o}`),t);n.set("_prefix",r),delete i[e],i[r]=n})),delete i[o];const s={};s[l(o,e)]=a,_.assign(i,s),Ember.set(a,"_idx",e)}}})),this._super.apply(this,arguments)},replaceContent(e,t){const n=Ember.get(this,"_prefix"),i=Ember.get(this,"_children");return _.forEach(this.toArray(),(function(t,r){const o=i[`${n}.${r}`];null!=o&&(null!=e[r]?o.replaceContent(e[r],!0):(delete i[`${n}.${r}`],o.destroy()))})),t||this._set(n,e),Ember.set(this,"content",e),this},_submitOp(e,t,n){const i={p:this.get("_prefix").split(".").concat(e)};if(void 0!==t&&(i.li=t),void 0!==n&&(i.ld=n),null!=t||null!=n)return this.get("doc").submitOp([i])},objectAt(e){const t=this._super(e),n=this.get("_prefix");return this.useSubs(t,n,e)},toJson(){return _.map(this.toArray(),(function(e){return"string"==typeof e||"number"==typeof e?e:e.toJson()}))},_replace(e,t,n){_.isArray(n)||(n=[n]),this.arrayContentWillChange(e,t,n.length);const i=t>n.length?t:n.length;for(let r=0;r<i;r++){const i=r+e;let o=n.objectAt(r);null!=o&&(o=null==o.toJson?o:o.toJson());let s=this.objectAt(i);null!=s&&(s=null==s.toJson?s:s.toJson()),this._submitOp(i,o,t>r?s:void 0)}this.arrayContentDidChange(e,t,n.length);const r=this.get(`doc.data.${this.get("_prefix")}`);return _.isEqual(this.get("content"),r)||this.onChangeDoc(),this},onChangeDoc:function(){this.replaceContent(this.get(`doc.data.${this.get("_prefix")}`),!0)}.observes("doc")})}(d,g).extend(l),m.extend({unload(){return this.get("_store").unload(this.get("_type"),this)},id:Ember.computed.reads("doc.id"),_childLimiations:function(){return[]}.property(),_root:function(){return this}.property(),_children:function(){return{}}.property(),_sdbProps:function(){return[]}.property(),setOpsInit:function(){const e=this.get("doc",!0),t=this.get("oldDoc"),n=c(this);t&&t.destroy(),TEST_ENV?(e.on("before op",n.beforeAfter("Will")),e.on("op",n.beforeAfter("Did"))):(e.on("before component",n.beforeAfter("Will")),e.on("after component",n.beforeAfter("Did"))),this.set("oldDoc",e)}.observes("doc").on("init"),willDestroy(){this.get("doc")&&this.get("doc").destroy((()=>{const e=c(this);this._super.apply(this,arguments),e.removeChildren()}))}});const b={plurals:[[/$/,"s"],[/s$/i,"s"],[/^(ax|test)is$/i,"$1es"],[/(octop|vir)us$/i,"$1i"],[/(octop|vir)i$/i,"$1i"],[/(alias|status|bonus)$/i,"$1es"],[/(bu)s$/i,"$1ses"],[/(buffal|tomat)o$/i,"$1oes"],[/([ti])um$/i,"$1a"],[/([ti])a$/i,"$1a"],[/sis$/i,"ses"],[/(?:([^f])fe|([lr])f)$/i,"$1$2ves"],[/(hive)$/i,"$1s"],[/([^aeiouy]|qu)y$/i,"$1ies"],[/(x|ch|ss|sh)$/i,"$1es"],[/(matr|vert|ind)(?:ix|ex)$/i,"$1ices"],[/^(m|l)ouse$/i,"$1ice"],[/^(m|l)ice$/i,"$1ice"],[/^(ox)$/i,"$1en"],[/^(oxen)$/i,"$1"],[/(quiz)$/i,"$1zes"]],singular:[[/s$/i,""],[/(ss)$/i,"$1"],[/(n)ews$/i,"$1ews"],[/([ti])a$/i,"$1um"],[/((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)(sis|ses)$/i,"$1sis"],[/(^analy)(sis|ses)$/i,"$1sis"],[/([^f])ves$/i,"$1fe"],[/(hive)s$/i,"$1"],[/(tive)s$/i,"$1"],[/([lr])ves$/i,"$1f"],[/([^aeiouy]|qu)ies$/i,"$1y"],[/(s)eries$/i,"$1eries"],[/(m)ovies$/i,"$1ovie"],[/(x|ch|ss|sh)es$/i,"$1"],[/^(m|l)ice$/i,"$1ouse"],[/(bus)(es)?$/i,"$1"],[/(o)es$/i,"$1"],[/(shoe)s$/i,"$1"],[/(cris|test)(is|es)$/i,"$1is"],[/^(a)x[ie]s$/i,"$1xis"],[/(octop|vir)(us|i)$/i,"$1us"],[/(alias|status|bonus)(es)?$/i,"$1"],[/^(ox)en/i,"$1"],[/(vert|ind)ices$/i,"$1ex"],[/(matr)ices$/i,"$1ix"],[/(quiz)zes$/i,"$1"],[/(database)s$/i,"$1"]],irregularPairs:[["person","people"],["man","men"],["child","children"],["sex","sexes"],["move","moves"],["cow","kine"],["zombie","zombies"]],uncountable:["equipment","information","rice","money","species","series","fish","sheep","jeans","police"]},{capitalize:y}=_,x=/^\s*$/,$=/([\w/-]+[_/\s-])([a-z\d]+$)/,C=/([\w/\s-]+)([A-Z][a-z\d]*$)/,E=/[A-Z][a-z\d]*$/;function v(e,t){for(let n=0,{length:i}=t;n<i;n++)e.uncountable[t[n].toLowerCase()]=!0}function P(e,t){let n;for(let i=0,{length:r}=t;i<r;i++)n=t[i],e.irregular[n[0].toLowerCase()]=n[1],e.irregular[n[1].toLowerCase()]=n[1],e.irregularInverse[n[1].toLowerCase()]=n[0],e.irregularInverse[n[0].toLowerCase()]=n[0]}function w(e){(e=e||{}).uncountable=e.uncountable||O(),e.irregularPairs=e.irregularPairs||O();const t=this.rules={plurals:e.plurals||[],singular:e.singular||[],irregular:O(),irregularInverse:O(),uncountable:O()};v(t,e.uncountable),P(t,e.irregularPairs),this.enableCache()}if(!Object.create&&!Object.create(null).hasOwnProperty)throw new Error("This browser does not support Object.create(null), please polyfil with es5-sham: http://git.io/yBU2rg");function O(){const e=Object.create(null);return e._dict=null,delete e._dict,e}w.prototype={enableCache(){this.purgeCache(),this.singularize=function(e){return this._cacheUsed=!0,this._sCache[e]||(this._sCache[e]=this._singularize(e))},this.pluralize=function(e,t,n={}){this._cacheUsed=!0;const i=[e,t,n.withoutCount];return this._pCache[i]||(this._pCache[i]=this._pluralize(e,t,n))}},purgeCache(){this._cacheUsed=!1,this._sCache=O(),this._pCache=O()},disableCache(){this._sCache=null,this._pCache=null,this.singularize=function(e){return this._singularize(e)},this.pluralize=function(){return this._pluralize(...arguments)}},plural(e,t){this._cacheUsed&&this.purgeCache(),this.rules.plurals.push([e,t.toLowerCase()])},singular(e,t){this._cacheUsed&&this.purgeCache(),this.rules.singular.push([e,t.toLowerCase()])},uncountable(e){this._cacheUsed&&this.purgeCache(),v(this.rules,[e.toLowerCase()])},irregular(e,t){this._cacheUsed&&this.purgeCache(),P(this.rules,[[e,t]])},pluralize(){return this._pluralize(...arguments)},_pluralize(e,t,n={}){return void 0===t?this.inflect(e,this.rules.plurals,this.rules.irregular):(1!==parseFloat(e)&&(t=this.inflect(t,this.rules.plurals,this.rules.irregular)),n.withoutCount?t:`${e} ${t}`)},singularize(e){return this._singularize(e)},_singularize(e){return this.inflect(e,this.rules.singular,this.rules.irregularInverse)},inflect(e,t,n){let i,r,o,s,c,h,l,u,a,d;if(l=!e||x.test(e),u=E.test(e),l)return e;if(s=e.toLowerCase(),c=$.exec(e)||C.exec(e),c&&(h=c[2].toLowerCase()),d=this.rules.uncountable[s]||this.rules.uncountable[h],d)return e;for(a in n)if(s.match(`${a}$`))return r=n[a],u&&n[h]&&(r=y(r),a=y(a)),e.replace(new RegExp(a,"i"),r);for(let n=t.length,r=0;n>r&&(i=t[n-1],a=i[0],!a.test(e));n--);return i=i||[],a=i[0],r=i[1],o=e.replace(a,r),o}},w.defaultRules=b,w.inflector=new w(b);const j=w.inflector;let{singularize:A,pluralize:k}=j;A=A.bind(j),k=k.bind(j);const{Promise:S}=Ember.RSVP,z=Ember.ObjectProxy.extend(Ember.PromiseProxyMixin),L=(Ember.Object.extend(Ember.Evented,{socket:null,connection:null,url:window.location.hostname,init(){const e=this;if(this.checkSocket=function(){return new S((function(t,n){if(null==e.socket)e.one("connectionOpen",t);else{const i=function(n,i){switch(n){case"connected":return t();case"connecting":return e.connection.once("connected",t);default:i(n)}},r=function(e){switch(e){case"closed":return n("connection closed");case"disconnected":return n("connection disconnected");case"stopped":return n("connection closing")}};let o=!1;i(e.connection.state,(function(t){o?r(t):Ember.run.next(this,(function(){o=!0,i(e.connection.state,r)}))}))}}))},this.checkConnection=function(){return new S((function(t,n){return e.checkSocket().then((function(){return t()})).catch((function(e){return n(e)}))}))},this.cache={},!window.sharedb)throw new Error("sharedb client not included");if(void 0===window.BCSocket&&void 0===window.Primus)throw new Error("No Socket library included");this.beforeConnect?this.beforeConnect().then((function(){e.trigger("connect")})):e.trigger("connect")},doConnect:function(e){const t=this;if(window.BCSocket)this.setProperties(e),this.socket=new BCSocket(this.get("url"),{reconnect:!0}),this.socket.onerror=function(e){t.trigger("connectionError",[e])},this.socket.onopen=function(){t.trigger("connectionOpen")},this.socket.onclose=function(){t.trigger("connectionEnd")};else{if(!window.Primus)throw new Error("No Socket library included");{o(),this.setProperties(e);let n=this.get("url");this.get("protocol")&&(n=`${this.get("protocol")}://${n}`),this.get("port")?n+=`:${this.get("port")}`:n+=":80",this.socket=new Primus(n,e),this.socket.on("error",(function(e){t.trigger("connectionError",[e])})),this.socket.on("open",(function(){t.trigger("connectionOpen")})),this.socket.on("end",(function(){t.trigger("connectionEnd")})),this.socket.on("close",(function(){t.trigger("connectionEnd")}))}}const n=sharedb.Connection.prototype.handleMessage;sharedb.Connection.prototype.send,t.on("connectionEnd",(function(){t.isAuthenticated=!1})),sharedb.Connection.prototype.handleMessage=function(e){let i;i=arguments;const r=this;if(n.apply(r,i),"init"===e.a&&"string"==typeof e.id&&1===e.protocol&&"function"==typeof t.authenticate)return t.isAuthenticating=!0,t.authenticate(e.id).then((function(){console.log("authenticated !"),t.isAuthenticating=!1,t.isAuthenticated=!0,n.apply(r,i),t.trigger("authenticated")})).catch((function(e){t.isAuthenticating=!1}))},this.connection=new sharedb.Connection(this.socket)}.on("connect"),find(e,t){e=k(e);const n=this;return this.checkConnection().then((function(){return n.findQuery(e,{_id:t}).then((function(e){return e[0]}),(function(e){return e}))}))},createRecord(e,t){let i,r;r=(i=this._getPathForType(e))?i:e.pluralize(),r=this._getPrefix(e)+r,e=k(e);const o=this;return o.checkConnection().then((function(){const i=o.connection.get(r,null==t.id?n():t.id);return S.all([o.whenReady(i).then((function(e){return o.create(e,t)})),o.subscribe(i)]).then((function(){const t=o._createModel(e,i);return o._cacheFor(e).addObject(t),t}))}))},deleteRecord(e,t){const n=this._cacheFor(k(e)).findBy("id",t).get("doc");return new S((function(e,t){n.del((function(n){null!=n?t(n):e()}))}))},findAndSubscribeQuery(e,t){e=k(e);const n=this,i=this._getPrefix(e);return this.checkConnection().then((function(){return new S((function(r,o){let s,c;c=n.connection.createSubscribeQuery(i+e,t,null,(function(t,i,h){if(null!==t)return o(t);r(n._resolveModels(e,i).then((function(e){return s=e,{models:e,query:c}})))})),c.on("insert",(function(t){n._resolveModels(e,t).then((function(e){return s.addObjects(e)}))})),c.on("remove",(function(t){n._resolveModels(e,t).then((function(t){return _.forEach(t,(function(t){n.unload(e,t)})),s.removeObjects(t)}))}))}))}))},findRecord(e,t){const n=this,i=n.cache[k(e)];return z.create({promise:new S((function(r,o){try{var s=i[0].doc.id==t&&1==i.length}catch(e){}s?r(i[0]):n.findQuery(e,{_id:t}).then((function(e){r(e[0])})).catch((function(e){o(e)}))}))})},findQuery(e,t){let n,i;i=(n=this._getPathForType(e))?n:k(e),i=this._getPrefix(e)+i;const r=this;return this.checkConnection().then((function(){return new S((function(n,o){r.connection.createFetchQuery(i,t,null,(function(t,i,s){if(null!==t)return o(t);n(r._resolveModels(e,i))}))}))}))},findAll(e,t){throw e=k(e),new Error("findAll not implemented")},_cacheFor(e){e=k(e);let t=this.cache[e];return void 0===t&&(this.cache[e]=t=[]),t},_getPathForType(e){const t=Ember.getOwner(this).lookup(`adapter:${A(e)}`);if(t&&t.pathForType)return t.pathForType(e)},_getPrefix(e){const t=Ember.getOwner(this).lookup(`adapter:${A(e)}`);let n;return t&&(n=t.get("prefix")),n||(n=""),n},_factoryFor(e){let t;const n=(t=this.get("modelStr"))?t:"model-sdb";return Ember.getOwner(this).factoryFor(`${n}:${A(e)}`)},_createModel(e,t){const n=this._factoryFor(e);if(n)return n.create({doc:t,_type:k(e),_store:this});throw new Error(`Cannot find model for ${e}`)},_resolveModel(e,t){const n=this._cacheFor(k(e)),i=Ember.get(t,"id")||Ember.get(t,"_id"),r=n.findBy("id",i);if(void 0!==r)return S.resolve(r);const o=this;return o.subscribe(t).then((function(t){return o._createModel(e,t)}))},_resolveModels(e,t){const n=this._cacheFor(k(e)),i=[],r=[];for(let o=0;o<t.length;o++){const s=t[o],c=n.findBy("id",s.id);c?i.push(c):r.push(this._resolveModel(e,s))}return new S((function(e,t){Ember.isEmpty(r)?e(i):S.all(r).then((function(t){n.addObjects(t),e(i.concat(t))})).catch((function(e){t(e)}))}))},whenReady:e=>"ready"===e.state?S.resolve(e):new S((function(t,n){e.on("load",(function(){Ember.run(null,t,e)}))})),unloadRecord(e,t){const n=this.cache[e.get("_type")];return e.get("doc").destroy((()=>{if(n.removeObject(e),e.destroy(),"function"==typeof t)return t()})),this},unload(e,t){e=k(e);const n=this._cacheFor(e);try{t.get("doc").destroy((()=>{n.removeObject(t),t.destroy()}))}catch(e){}t.destroy(),n.removeObject(t)},unloadAll(e){return new S(((t,n)=>{const i=this.cache[k(e)]||[],r=i.map((e=>new S((t=>{e.get("doc").destroy((()=>{e.destroy(),t()}))}))));return S.all(r).then((()=>{i.removeObjects(i),t()})).catch(n)}))},peekAll(e){return e=k(e),this._cacheFor(e)},subscribe:e=>e.subscribed?S.resolve(e):new S((function(t,n){e.subscribe((function(i){void 0===i?Ember.run(null,t,e):Ember.run(null,n,i)}))})),create:(e,t)=>new S((function(n,i){e.create(t,"json0",(function(t){void 0===t?Ember.run(null,n,e):Ember.run(null,i,t)}))}))}),{belongsToShare(e,t){const n=this.ShareStore;return Ember.computed({get(e){return n.findRecord(t,this.get(`doc.data.${e}`))},set:(e,t,n)=>t})},belongsTo(e,t){const n=this.originalStore;return Ember.computed({get(e){let i;return n.findRecord(t,this.get(i=`doc.data.${e}`))},set:(e,t,n)=>t})}}),{belongsTo:M}=L,{belongsToShare:D}=L;a("_sdbProps")})();
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else if(typeof exports === 'object')
+		exports["ember-share"] = factory();
+	else
+		root["ember-share"] = factory();
+})(self, function() {
+return /******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./lib/ember-share.js":
+/*!****************************!*\
+  !*** ./lib/ember-share.js ***!
+  \****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+/* harmony import */ var _ember_share_mixins_share_text__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ember-share/mixins/share-text */ "./lib/ember-share/mixins/share-text.js");
+/* harmony import */ var _ember_share_models_model__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ember-share/models/model */ "./lib/ember-share/models/model.js");
+/* harmony import */ var _ember_share_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ember-share/store */ "./lib/ember-share/store.js");
+/* harmony import */ var _ember_share_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ember-share/utils */ "./lib/ember-share/utils.js");
+/* harmony import */ var _ember_share_attr__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ember-share/attr */ "./lib/ember-share/attr.js");
+/* harmony import */ var _ember_share_belongs_to__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ember-share/belongs-to */ "./lib/ember-share/belongs-to.js");
+
+
+
+
+
+
+
+const { belongsTo } = _ember_share_belongs_to__WEBPACK_IMPORTED_MODULE_5__.default;
+const { belongsToShare } = _ember_share_belongs_to__WEBPACK_IMPORTED_MODULE_5__.default;
+
+const attr = (0,_ember_share_attr__WEBPACK_IMPORTED_MODULE_4__.default)("_sdbProps");
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  ShareTextMixin: _ember_share_mixins_share_text__WEBPACK_IMPORTED_MODULE_0__.default,
+  ShareProxy: _ember_share_models_model__WEBPACK_IMPORTED_MODULE_1__.default,
+  belongsTo,
+  belongsToShare,
+  Store: _ember_share_store__WEBPACK_IMPORTED_MODULE_2__.default,
+  Utils: _ember_share_utils__WEBPACK_IMPORTED_MODULE_3__.default,
+  attr,
+});
+
+
+/***/ }),
+
+/***/ "./lib/ember-share/attr.js":
+/*!*********************************!*\
+  !*** ./lib/ember-share/attr.js ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => /* export default binding */ __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+const sillyFunction = function (value) {
+  return value;
+};
+
+/* harmony default export */ function __WEBPACK_DEFAULT_EXPORT__(sdbProps) {
+  return function () {
+    let options;
+    let type;
+    options = {};
+    type = null;
+    _.forEach(arguments, function (arg) {
+      if (_.isPlainObject(arg)) {
+        return (options = arg);
+      }
+      if (_.isString(arg)) {
+        return (type = arg.charAt(0).toUpperCase() + arg.slice(1));
+      }
+    });
+    if (type != null && window[type] != null) {
+      var transfromToType = function (value) {
+        const newValue = new window[type](value);
+        if (type == "Date") return newValue;
+        return newValue.valueOf();
+      };
+    } else {
+      var transfromToType = sillyFunction;
+    }
+
+    return Ember.computed({
+      get(k) {
+        this.get(sdbProps, true).addObject(k);
+        const isSpecielKey = _.includes(
+          [
+            "_isSDB",
+            "_sdbProps",
+            "_subProps",
+            "doc",
+            "_prefix",
+            "content",
+            "_idx",
+            "_root",
+          ],
+          k
+        );
+
+        if (isSpecielKey || this._fullPath == null)
+          return transfromToType(this._get(k, true));
+        return transfromToType(this._get(this._fullPath(k)));
+      },
+      set(k, v, isFromServer) {
+        const path =
+          k == null
+            ? this.get("_prefix")
+            : k == "_idx" || !this._fullPath
+            ? k
+            : this._fullPath(k);
+        return this._set(path, v);
+      },
+    });
+  };
+}
+
+
+/***/ }),
+
+/***/ "./lib/ember-share/belongs-to.js":
+/*!***************************************!*\
+  !*** ./lib/ember-share/belongs-to.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  belongsToShare(DS, modelName) {
+    const store = this.ShareStore;
+
+    return Ember.computed({
+      get(k) {
+        let ref;
+        return store.findRecord(modelName, this.get(`doc.data.${k}`));
+      },
+      set(p, oi, isFromServer) {
+        return oi;
+      },
+    });
+  },
+
+  belongsTo(DS, modelName) {
+    const store = this.originalStore;
+    return Ember.computed({
+      get(k) {
+        let ref;
+
+        return store.findRecord(modelName, this.get((ref = `doc.data.${k}`)));
+      },
+      set(p, oi, isFromServer) {
+        return oi;
+      },
+    });
+  },
+});
+
+
+/***/ }),
+
+/***/ "./lib/ember-share/inflector/inflections.js":
+/*!**************************************************!*\
+  !*** ./lib/ember-share/inflector/inflections.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  plurals: [
+    [/$/, "s"],
+    [/s$/i, "s"],
+    [/^(ax|test)is$/i, "$1es"],
+    [/(octop|vir)us$/i, "$1i"],
+    [/(octop|vir)i$/i, "$1i"],
+    [/(alias|status|bonus)$/i, "$1es"],
+    [/(bu)s$/i, "$1ses"],
+    [/(buffal|tomat)o$/i, "$1oes"],
+    [/([ti])um$/i, "$1a"],
+    [/([ti])a$/i, "$1a"],
+    [/sis$/i, "ses"],
+    [/(?:([^f])fe|([lr])f)$/i, "$1$2ves"],
+    [/(hive)$/i, "$1s"],
+    [/([^aeiouy]|qu)y$/i, "$1ies"],
+    [/(x|ch|ss|sh)$/i, "$1es"],
+    [/(matr|vert|ind)(?:ix|ex)$/i, "$1ices"],
+    [/^(m|l)ouse$/i, "$1ice"],
+    [/^(m|l)ice$/i, "$1ice"],
+    [/^(ox)$/i, "$1en"],
+    [/^(oxen)$/i, "$1"],
+    [/(quiz)$/i, "$1zes"],
+  ],
+
+  singular: [
+    [/s$/i, ""],
+    [/(ss)$/i, "$1"],
+    [/(n)ews$/i, "$1ews"],
+    [/([ti])a$/i, "$1um"],
+    [
+      /((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)(sis|ses)$/i,
+      "$1sis",
+    ],
+    [/(^analy)(sis|ses)$/i, "$1sis"],
+    [/([^f])ves$/i, "$1fe"],
+    [/(hive)s$/i, "$1"],
+    [/(tive)s$/i, "$1"],
+    [/([lr])ves$/i, "$1f"],
+    [/([^aeiouy]|qu)ies$/i, "$1y"],
+    [/(s)eries$/i, "$1eries"],
+    [/(m)ovies$/i, "$1ovie"],
+    [/(x|ch|ss|sh)es$/i, "$1"],
+    [/^(m|l)ice$/i, "$1ouse"],
+    [/(bus)(es)?$/i, "$1"],
+    [/(o)es$/i, "$1"],
+    [/(shoe)s$/i, "$1"],
+    [/(cris|test)(is|es)$/i, "$1is"],
+    [/^(a)x[ie]s$/i, "$1xis"],
+    [/(octop|vir)(us|i)$/i, "$1us"],
+    [/(alias|status|bonus)(es)?$/i, "$1"],
+    [/^(ox)en/i, "$1"],
+    [/(vert|ind)ices$/i, "$1ex"],
+    [/(matr)ices$/i, "$1ix"],
+    [/(quiz)zes$/i, "$1"],
+    [/(database)s$/i, "$1"],
+  ],
+
+  irregularPairs: [
+    ["person", "people"],
+    ["man", "men"],
+    ["child", "children"],
+    ["sex", "sexes"],
+    ["move", "moves"],
+    ["cow", "kine"],
+    ["zombie", "zombies"],
+  ],
+
+  uncountable: [
+    "equipment",
+    "information",
+    "rice",
+    "money",
+    "species",
+    "series",
+    "fish",
+    "sheep",
+    "jeans",
+    "police",
+  ],
+});
+
+
+/***/ }),
+
+/***/ "./lib/ember-share/inflector/inflector.js":
+/*!************************************************!*\
+  !*** ./lib/ember-share/inflector/inflector.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+/* harmony import */ var _inflections__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./inflections */ "./lib/ember-share/inflector/inflections.js");
+
+
+const { capitalize } = _;
+
+const BLANK_REGEX = /^\s*$/;
+const LAST_WORD_DASHED_REGEX = /([\w/-]+[_/\s-])([a-z\d]+$)/;
+const LAST_WORD_CAMELIZED_REGEX = /([\w/\s-]+)([A-Z][a-z\d]*$)/;
+const CAMELIZED_REGEX = /[A-Z][a-z\d]*$/;
+
+function loadUncountable(rules, uncountable) {
+  for (let i = 0, { length } = uncountable; i < length; i++) {
+    rules.uncountable[uncountable[i].toLowerCase()] = true;
+  }
+}
+
+function loadIrregular(rules, irregularPairs) {
+  let pair;
+
+  for (let i = 0, { length } = irregularPairs; i < length; i++) {
+    pair = irregularPairs[i];
+
+    // pluralizing
+    rules.irregular[pair[0].toLowerCase()] = pair[1];
+    rules.irregular[pair[1].toLowerCase()] = pair[1];
+
+    // singularizing
+    rules.irregularInverse[pair[1].toLowerCase()] = pair[0];
+    rules.irregularInverse[pair[0].toLowerCase()] = pair[0];
+  }
+}
+
+/**
+ Inflector.Ember provides a mechanism for supplying inflection rules for your
+ application. Ember includes a default set of inflection rules, and provides an
+ API for providing additional rules.
+
+ Examples:
+
+ Creating an inflector with no rules.
+
+ ```js
+ var inflector = new Ember.Inflector();
+ ```
+
+ Creating an inflector with the default ember ruleset.
+
+ ```js
+ var inflector = new Ember.Inflector(Ember.Inflector.defaultRules);
+
+ inflector.pluralize('cow'); //=> 'kine'
+ inflector.singularize('kine'); //=> 'cow'
+ ```
+
+ Creating an inflector and adding rules later.
+
+ ```javascript
+ var inflector = Ember.Inflector.inflector;
+
+ inflector.pluralize('advice'); // => 'advices'
+ inflector.uncountable('advice');
+ inflector.pluralize('advice'); // => 'advice'
+
+ inflector.pluralize('formula'); // => 'formulas'
+ inflector.irregular('formula', 'formulae');
+ inflector.pluralize('formula'); // => 'formulae'
+
+ // you would not need to add these as they are the default rules
+ inflector.plural(/$/, 's');
+ inflector.singular(/s$/i, '');
+ ```
+
+ Creating an inflector with a nondefault ruleset.
+
+ ```javascript
+ var rules = {
+    plurals:  [
+      [ /$/, 's' ]
+    ],
+    singular: [
+      [ /\s$/, '' ]
+    ],
+    irregularPairs: [
+      [ 'cow', 'kine' ]
+    ],
+    uncountable: [ 'fish' ]
+  };
+
+ var inflector = new Ember.Inflector(rules);
+ ```
+
+ @class Inflector
+ @namespace Ember
+ */
+function Inflector(ruleSet) {
+  ruleSet = ruleSet || {};
+  ruleSet.uncountable = ruleSet.uncountable || makeDictionary();
+  ruleSet.irregularPairs = ruleSet.irregularPairs || makeDictionary();
+
+  const rules = (this.rules = {
+    plurals: ruleSet.plurals || [],
+    singular: ruleSet.singular || [],
+    irregular: makeDictionary(),
+    irregularInverse: makeDictionary(),
+    uncountable: makeDictionary(),
+  });
+
+  loadUncountable(rules, ruleSet.uncountable);
+  loadIrregular(rules, ruleSet.irregularPairs);
+
+  this.enableCache();
+}
+
+if (!Object.create && !Object.create(null).hasOwnProperty) {
+  throw new Error(
+    "This browser does not support Object.create(null), please polyfil with es5-sham: http://git.io/yBU2rg"
+  );
+}
+
+function makeDictionary() {
+  const cache = Object.create(null);
+  cache._dict = null;
+  delete cache._dict;
+  return cache;
+}
+
+Inflector.prototype = {
+  /**
+     @public
+
+     As inflections can be costly, and commonly the same subset of words are repeatedly
+     inflected an optional cache is provided.
+
+     @method enableCache
+     */
+  enableCache() {
+    this.purgeCache();
+
+    this.singularize = function (word) {
+      this._cacheUsed = true;
+      return (
+        this._sCache[word] || (this._sCache[word] = this._singularize(word))
+      );
+    };
+
+    this.pluralize = function (numberOrWord, word, options = {}) {
+      this._cacheUsed = true;
+      const cacheKey = [numberOrWord, word, options.withoutCount];
+      return (
+        this._pCache[cacheKey] ||
+        (this._pCache[cacheKey] = this._pluralize(numberOrWord, word, options))
+      );
+    };
+  },
+
+  /**
+     @public
+
+     @method purgeCache
+     */
+  purgeCache() {
+    this._cacheUsed = false;
+    this._sCache = makeDictionary();
+    this._pCache = makeDictionary();
+  },
+
+  /**
+     @public
+     disable caching
+
+     @method disableCache;
+     */
+  disableCache() {
+    this._sCache = null;
+    this._pCache = null;
+    this.singularize = function (word) {
+      return this._singularize(word);
+    };
+
+    this.pluralize = function () {
+      return this._pluralize(...arguments);
+    };
+  },
+
+  /**
+     @method plural
+     @param {RegExp} regex
+     @param {String} string
+     */
+  plural(regex, string) {
+    if (this._cacheUsed) {
+      this.purgeCache();
+    }
+    this.rules.plurals.push([regex, string.toLowerCase()]);
+  },
+
+  /**
+     @method singular
+     @param {RegExp} regex
+     @param {String} string
+     */
+  singular(regex, string) {
+    if (this._cacheUsed) {
+      this.purgeCache();
+    }
+    this.rules.singular.push([regex, string.toLowerCase()]);
+  },
+
+  /**
+     @method uncountable
+     @param {String} regex
+     */
+  uncountable(string) {
+    if (this._cacheUsed) {
+      this.purgeCache();
+    }
+    loadUncountable(this.rules, [string.toLowerCase()]);
+  },
+
+  /**
+     @method irregular
+     @param {String} singular
+     @param {String} plural
+     */
+  irregular(singular, plural) {
+    if (this._cacheUsed) {
+      this.purgeCache();
+    }
+    loadIrregular(this.rules, [[singular, plural]]);
+  },
+
+  /**
+     @method pluralize
+     @param {String} word
+     */
+  pluralize() {
+    return this._pluralize(...arguments);
+  },
+
+  _pluralize(wordOrCount, word, options = {}) {
+    if (word === undefined) {
+      return this.inflect(
+        wordOrCount,
+        this.rules.plurals,
+        this.rules.irregular
+      );
+    }
+
+    if (parseFloat(wordOrCount) !== 1) {
+      word = this.inflect(word, this.rules.plurals, this.rules.irregular);
+    }
+
+    return options.withoutCount ? word : `${wordOrCount} ${word}`;
+  },
+
+  /**
+     @method singularize
+     @param {String} word
+     */
+  singularize(word) {
+    return this._singularize(word);
+  },
+
+  _singularize(word) {
+    return this.inflect(word, this.rules.singular, this.rules.irregularInverse);
+  },
+
+  /**
+     @protected
+
+     @method inflect
+     @param {String} word
+     @param {Object} typeRules
+     @param {Object} irregular
+     */
+  inflect(word, typeRules, irregular) {
+    let inflection;
+    let substitution;
+    let result;
+    let lowercase;
+    let wordSplit;
+    let lastWord;
+    let isBlank;
+    let isCamelized;
+    let rule;
+    let isUncountable;
+
+    isBlank = !word || BLANK_REGEX.test(word);
+    isCamelized = CAMELIZED_REGEX.test(word);
+
+    if (isBlank) {
+      return word;
+    }
+
+    lowercase = word.toLowerCase();
+    wordSplit =
+      LAST_WORD_DASHED_REGEX.exec(word) || LAST_WORD_CAMELIZED_REGEX.exec(word);
+
+    if (wordSplit) {
+      lastWord = wordSplit[2].toLowerCase();
+    }
+
+    isUncountable =
+      this.rules.uncountable[lowercase] || this.rules.uncountable[lastWord];
+
+    if (isUncountable) {
+      return word;
+    }
+
+    for (rule in irregular) {
+      if (lowercase.match(`${rule}$`)) {
+        substitution = irregular[rule];
+
+        if (isCamelized && irregular[lastWord]) {
+          substitution = capitalize(substitution);
+          rule = capitalize(rule);
+        }
+
+        return word.replace(new RegExp(rule, "i"), substitution);
+      }
+    }
+
+    for (let i = typeRules.length, min = 0; i > min; i--) {
+      inflection = typeRules[i - 1];
+      rule = inflection[0];
+
+      if (rule.test(word)) {
+        break;
+      }
+    }
+
+    inflection = inflection || [];
+
+    rule = inflection[0];
+    substitution = inflection[1];
+
+    result = word.replace(rule, substitution);
+
+    return result;
+  },
+};
+
+Inflector.defaultRules = _inflections__WEBPACK_IMPORTED_MODULE_0__.default;
+Inflector.inflector = new Inflector(_inflections__WEBPACK_IMPORTED_MODULE_0__.default);
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Inflector.inflector);
+
+
+/***/ }),
+
+/***/ "./lib/ember-share/mixins/share-text.js":
+/*!**********************************************!*\
+  !*** ./lib/ember-share/mixins/share-text.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils */ "./lib/ember-share/utils.js");
+/*
+ * Share-text mixin, this mixin sends text operations instead of the default
+ * behaviour which is to replace the entire string. to utilize the mixin add
+ * the text property names to the textKeys array
+ */
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Ember.Mixin.create({
+  textKeys: [],
+  triggerEvents: false,
+  textEvents: function () {
+    const that = this;
+    this._textContexts = new Array(this.textKeys.length);
+
+    // to hold the listners and remove them on destory
+    this._handlers = new Array(this._textContexts.length * 2);
+    for (let i = 0; i < this.textKeys.length; i++) {
+      const key = this.textKeys[i];
+      const subCtx = this._context.createContextAt([key]);
+      this._handlers[key] = new Array(2);
+
+      // server changes -> local
+      this._handlers[key].push(
+        subCtx.on("insert", Ember.run.bind(this, this.handleInsert, key))
+      );
+      this._handlers[key].push(
+        subCtx.on("delete", Ember.run.bind(this, this.handleDelete, key))
+      );
+      this._textContexts[key] = subCtx;
+    }
+  }.on("init"),
+  setUnknownProperty(key, value) {
+    if (this.textKeys.indexOf(key) >= 0) {
+      // local changes -> server
+      this.textOp(key, value);
+    } else {
+      this._super(key, value);
+    }
+  },
+  textOp(key, value) {
+    // when the object was removed but has a lingering binding
+    // propably an assertion is better
+    if (this._context.get() === undefined) {
+      return;
+    }
+    this.propertyWillChange(key);
+    const components = _utils__WEBPACK_IMPORTED_MODULE_0__.diff.diff(
+      this._cache[key] || "",
+      value.replace(/\r\n/g, "\n")
+    );
+    this._cache[key] = value.replace(/\r\n/g, "\n");
+    let changePosition = 0;
+    for (let i = 0; i < components.length; i++) {
+      if (components[i].added) {
+        this._context.insert([key, changePosition], components[i].value);
+      } else if (components[i].removed) {
+        this._context.remove([key, changePosition], components[i].value.length);
+      }
+      changePosition += components[i].value.length;
+    }
+    this.propertyDidChange(key);
+  },
+  handleInsert(key, position, data) {
+    this.propertyWillChange(key);
+    if (this._cache[key] === undefined) {
+      // force caching
+      this.get(key);
+    }
+    const updatedText =
+      this._cache[key].slice(0, position) +
+      data +
+      this._cache[key].slice(position);
+    this._cache[key] = updatedText;
+    // use trigger to update the view when in DOM
+    if (this.triggerEvents) {
+      this.trigger("textInsert", position, data);
+    }
+    this.propertyDidChange(key);
+  },
+  handleDelete(key, position, data) {
+    if (this._cache[key] === undefined) {
+      // force caching
+      this.get(key);
+    }
+    this.propertyWillChange(key);
+    const { length } = data;
+    const updatedText =
+      this._cache[key].slice(0, position) +
+      this._cache[key].slice(position + length);
+    this._cache[key] = updatedText;
+    // use trigger to update the view when in DOM
+    if (this.triggerEvents) {
+      this.trigger("textDelete", position, data);
+    }
+    this.propertyDidChange(key);
+  },
+  willDestroy() {
+    // remove the listners
+    for (const key in this._textContexts) {
+      this._textContexts[key].removeListener(this._handlers[key][0]);
+      this._textContexts[key].removeListener(this._handlers[key][1]);
+      this._textContexts[key].destroy();
+    }
+    this._super();
+  },
+}));
+
+
+/***/ }),
+
+/***/ "./lib/ember-share/models/base.js":
+/*!****************************************!*\
+  !*** ./lib/ember-share/models/base.js ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+/* harmony import */ var _use_subs_mixin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./use-subs-mixin */ "./lib/ember-share/models/use-subs-mixin.js");
+/* harmony import */ var _sub_mixin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./sub-mixin */ "./lib/ember-share/models/sub-mixin.js");
+/* harmony import */ var _sub_array__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./sub-array */ "./lib/ember-share/models/sub-array.js");
+/* harmony import */ var _subs_handler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./subs-handler */ "./lib/ember-share/models/subs-handler.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utils */ "./lib/ember-share/models/utils.js");
+
+
+
+
+
+
+const toJson = function (obj) {
+  return obj == null ? void 0 : JSON.parse(JSON.stringify(obj));
+};
+
+const getPlainObject = function (value) {
+  if (
+    value != null &&
+    !(
+      typeof value === "string" ||
+      typeof value === "number" ||
+      typeof value === "boolean"
+    )
+  )
+    if (typeof value.toJson === "function") return value.toJson();
+    else return toJson(value);
+
+  return value;
+};
+
+//
+//   ShareDb Base Class
+//
+//        Root and all subs (currently not arrays) inherit from base.
+//
+//
+
+const GetterSettersMixin = Ember.Mixin.create({
+  _get(k, selfCall) {
+    const firstValue = _.head(k.split("."));
+
+    if (k != "_sdbProps" && _.includes(this.get("_sdbProps"), firstValue)) {
+      const content = this.get(`doc.data.${k}`);
+      return this.useSubs(content, k);
+    }
+    return this.get(k);
+  },
+
+  _set(path, oi) {
+    const firstValue = _.first(path.split("."));
+    const self = this;
+
+    if (Ember.get(this, "_prefix") == null) this.get(firstValue);
+
+    if (path != "_sdbProps" && _.includes(this.get("_sdbProps"), firstValue)) {
+      const od = getPlainObject(this._get(path));
+      oi = getPlainObject(oi);
+      const p = path.split(".");
+      const utils = (0,_utils__WEBPACK_IMPORTED_MODULE_4__.default)(this);
+      utils.removeChildren(path, true);
+      const op = {
+        p,
+        od,
+        oi,
+      };
+
+      if (od == null) delete op.od;
+
+      if (op.oi != op.od) {
+        this.get("doc").submitOp([op], function (err) {
+          self.get("_root", true).trigger("submitted", err);
+        });
+      }
+
+      return this.useSubs(oi, path);
+    }
+    return this.set(path, oi, true);
+  },
+});
+let SDBBase = Ember.Object.extend(Ember.Evented, GetterSettersMixin, {
+  _isSDB: true,
+
+  notifyProperties: function notifyProperties(props) {
+    const self = this;
+    _.forEach(props, function (prop) {
+      self.notifyPropertyChange(prop);
+    });
+    return this;
+  },
+
+  notifyDidProperties: function notifyDidProperties(props) {
+    const self = this;
+    _.forEach(props, function (prop) {
+      self.propertyDidChange(prop);
+    });
+    return this;
+  },
+
+  notifyWillProperties: function notifyWillProperties(props) {
+    const self = this;
+    _.forEach(props, function (prop) {
+      self.propertyWillChange(prop);
+    });
+    return this;
+  },
+
+  deleteProperty: function deleteProperty(k) {
+    const doc = this.get("doc");
+    const p = k.split(".");
+    const od = getPlainObject(this.get(`_root.${k}`));
+    doc.submitOp([
+      {
+        p,
+        od,
+      },
+    ]);
+  },
+
+  setProperties: function setProperties(obj) {
+    const sdbProps = this.get("_sdbProps");
+    const self = this;
+    const SDBpropsFromObj = _.filter(_.keys(obj), function (key) {
+      self.get(key);
+      return _.includes(sdbProps, key);
+    });
+    const nonSDB = _.reject(_.keys(obj), function (key) {
+      return _.includes(sdbProps, key);
+    });
+    this._super(_.pick(obj, nonSDB));
+    _.forEach(SDBpropsFromObj, function (key) {
+      self.set(key, obj[key]);
+    });
+    return this;
+  },
+});
+
+SDBBase = SDBBase.extend(_use_subs_mixin__WEBPACK_IMPORTED_MODULE_0__.default);
+_subs_handler__WEBPACK_IMPORTED_MODULE_3__.default.object = SDBBase.extend(_sub_mixin__WEBPACK_IMPORTED_MODULE_1__.default);
+_subs_handler__WEBPACK_IMPORTED_MODULE_3__.default.array = (0,_sub_array__WEBPACK_IMPORTED_MODULE_2__.default)(_sub_mixin__WEBPACK_IMPORTED_MODULE_1__.default, GetterSettersMixin).extend(_use_subs_mixin__WEBPACK_IMPORTED_MODULE_0__.default);
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SDBBase);
+
+
+/***/ }),
+
+/***/ "./lib/ember-share/models/model.js":
+/*!*****************************************!*\
+  !*** ./lib/ember-share/models/model.js ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils */ "./lib/ember-share/models/utils.js");
+/* harmony import */ var _base__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./base */ "./lib/ember-share/models/base.js");
+
+
+
+//
+//   ShareDb Ember Model Class
+//
+//        extends Base.
+//        this is model has a recursive structure, getting an inner object or array will return
+//        a sub object which is conencted to its parent.
+//        an over view of the entire structure can be found here:
+//        https://www.gliffy.com/go/share/sn1ehtp86ywtwlvhsxid
+//
+//
+
+const SDBRoot = _base__WEBPACK_IMPORTED_MODULE_1__.default.extend({
+  unload() {
+    return this.get("_store").unload(this.get("_type"), this);
+  },
+
+  id: Ember.computed.reads("doc.id"),
+
+  _childLimiations: function () {
+    return [];
+  }.property(),
+
+  _root: function () {
+    return this;
+  }.property(),
+
+  _children: function () {
+    return {};
+  }.property(),
+
+  _sdbProps: function () {
+    return [];
+  }.property(),
+
+  setOpsInit: function () {
+    const doc = this.get("doc", true);
+    const oldDoc = this.get("oldDoc");
+    const utils = (0,_utils__WEBPACK_IMPORTED_MODULE_0__.default)(this);
+    const self = this;
+
+    if (oldDoc) {
+      oldDoc.destroy();
+    }
+
+    if (false) {} else {
+      doc.on("before component", utils.beforeAfter("Will"));
+      doc.on("after component", utils.beforeAfter("Did"));
+    }
+
+    this.set("oldDoc", doc);
+  }
+    .observes("doc")
+    .on("init"),
+
+  willDestroy() {
+    if (this.get("doc")) {
+      this.get("doc").destroy(() => {
+        const utils = (0,_utils__WEBPACK_IMPORTED_MODULE_0__.default)(this);
+        this._super.apply(this, arguments);
+        utils.removeChildren();
+      });
+    }
+  },
+});
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SDBRoot);
+
+
+/***/ }),
+
+/***/ "./lib/ember-share/models/sub-array.js":
+/*!*********************************************!*\
+  !*** ./lib/ember-share/models/sub-array.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => /* export default binding */ __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+/* harmony import */ var _sub_mixin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./sub-mixin */ "./lib/ember-share/models/sub-mixin.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils */ "./lib/ember-share/models/utils.js");
+
+
+
+const allButLast = function (arr) {
+  return arr.slice(0, arr.length - 1);
+};
+
+//
+//   Sub Array Class
+//
+//        this is An Ember Array Proxy, uses sub mixin and 'Use Sub Mixin'
+//
+//
+
+/* harmony default export */ function __WEBPACK_DEFAULT_EXPORT__(SubMixin, GetterSettersMixin) {
+  return Ember.ArrayProxy.extend(Ember.Evented, SubMixin, GetterSettersMixin, {
+    _isArrayProxy: true,
+
+    arrayContentDidChange(startIdx, removeAmt, addAmt) {
+      const _removeAmt = removeAmt == null ? 0 : removeAmt * -1;
+      if (_removeAmt + (addAmt == null) ? 0 : addAmt)
+        Ember.get(this, "content").propertyDidChange("lastObject");
+      return this._super.apply(this, arguments);
+    },
+
+    arrayContentWillChange(startIdx, removeAmt, addAmt) {
+      const children = Ember.get(this, "_children");
+      const childrenKeys = Object.keys(children);
+      const prefix = Ember.get(this, "_prefix");
+      const self = this;
+      const utils = (0,_utils__WEBPACK_IMPORTED_MODULE_1__.default)(this);
+
+      const replaceLastIdx = function (str, idx) {
+        const arr = allButLast(str.split("."));
+        return `${arr.join(".")}.${idx}`;
+      };
+      const _removeAmt = removeAmt == null ? 0 : removeAmt * -1;
+      addAmt = addAmt == null ? 0 : addAmt;
+      if (_removeAmt + addAmt)
+        Ember.get(this, "content").propertyWillChange("lastObject");
+      const childrenKeysReduced = _.reduce(
+        childrenKeys,
+        function (result, key) {
+          if (allButLast(key.split(".")).join(".") == prefix) result.push(key);
+          return result;
+        },
+        []
+      );
+      _.forEach(childrenKeysReduced, function (childKey) {
+        const idx = +_.last(childKey.split("."));
+        if (!isNaN(idx)) {
+          const child = children[childKey];
+          if (_removeAmt + addAmt == 0) {
+            if (idx >= addAmt) {
+              utils.removeChildren(childKey, true);
+              Ember.get(self, "content").propertyWillChange("lastObject");
+            }
+          } else if (
+            (addAmt && startIdx <= idx) ||
+            (removeAmt && startIdx < idx)
+          ) {
+            const newIdx = idx + _removeAmt + addAmt;
+            const newChildKey = replaceLastIdx(childKey, newIdx);
+            childrenKeys
+              .filter(function (childKeyA) {
+                return childKeyA.match(new RegExp(`^${childKey}\\.`));
+              })
+              .forEach(function (grandChildKey) {
+                const grandChild = children[grandChildKey];
+                const newGrandChildKey = grandChildKey.replace(
+                  new RegExp(`^${childKey}`),
+                  newChildKey
+                );
+                grandChild.set("_prefix", newGrandChildKey);
+                delete children[grandChildKey];
+                children[newGrandChildKey] = grandChild;
+              });
+            delete children[childKey];
+            const tempChild = {};
+            tempChild[replaceLastIdx(childKey, newIdx)] = child;
+            _.assign(children, tempChild);
+            Ember.set(child, "_idx", newIdx);
+          }
+        }
+      });
+      return this._super.apply(this, arguments);
+    },
+
+    // useSubs:
+
+    replaceContent(content, noSet) {
+      let removeAmt;
+      let addAmt;
+      const prefix = Ember.get(this, "_prefix");
+      const children = Ember.get(this, "_children");
+      _.forEach(this.toArray(), function (value, index) {
+        const child = children[`${prefix}.${index}`];
+        if (child != null)
+          if (content[index] != null)
+            child.replaceContent(content[index], true);
+          else {
+            delete children[`${prefix}.${index}`];
+            child.destroy();
+          }
+      });
+
+      if (!noSet) this._set(prefix, content);
+
+      Ember.set(this, "content", content);
+      return this;
+    },
+
+    _submitOp(p, li, ld) {
+      const path = this.get("_prefix").split(".");
+      const op = {
+        p: path.concat(p),
+      };
+
+      if (typeof li !== "undefined") op.li = li;
+
+      if (typeof ld !== "undefined") op.ld = ld;
+
+      if (li != null || ld != null) {
+        return this.get("doc").submitOp([op]);
+      }
+    },
+
+    objectAt(idx) {
+      const content = this._super(idx);
+      const prefix = this.get("_prefix");
+      return this.useSubs(content, prefix, idx);
+    },
+
+    toJson() {
+      const self = this;
+      return _.map(this.toArray(), function (value) {
+        if (typeof value === "string" || typeof value === "number")
+          return value;
+        return value.toJson();
+      });
+    },
+
+    _replace(start, len, objects) {
+      if (!_.isArray(objects)) {
+        objects = [objects];
+      }
+      this.arrayContentWillChange(start, len, objects.length);
+      const iterationLength = len > objects.length ? len : objects.length;
+      for (let i = 0; i < iterationLength; i++) {
+        const newIndex = i + start;
+        let obj = objects.objectAt(i);
+        if (obj != null) obj = obj.toJson == null ? obj : obj.toJson();
+        let oldObj = this.objectAt(newIndex);
+        if (oldObj != null)
+          oldObj = oldObj.toJson == null ? oldObj : oldObj.toJson();
+        this._submitOp(newIndex, obj, len > i ? oldObj : undefined);
+      }
+      this.arrayContentDidChange(start, len, objects.length);
+      const realContent = this.get(`doc.data.${this.get("_prefix")}`);
+      if (!_.isEqual(this.get("content"), realContent)) {
+        this.onChangeDoc();
+      }
+      return this;
+    },
+
+    onChangeDoc: function () {
+      // debugger
+      // this.set ('content', this.get('doc.data.' + this.get('_prefix')))
+      // Ember.run.next (this, function () P{})
+      this.replaceContent(this.get(`doc.data.${this.get("_prefix")}`), true);
+    }.observes("doc"),
+  });
+}
+
+
+/***/ }),
+
+/***/ "./lib/ember-share/models/sub-mixin.js":
+/*!*********************************************!*\
+  !*** ./lib/ember-share/models/sub-mixin.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils */ "./lib/ember-share/models/utils.js");
+/* harmony import */ var _attr__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../attr */ "./lib/ember-share/attr.js");
+
+
+
+//
+//   Sub Mixin
+//
+//        All subs use this mixin (Object and Array)
+//
+//
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Ember.Mixin.create({
+  _children: function () {
+    return {};
+  }.property(),
+
+  _sdbProps: function () {
+    return [];
+  }.property(),
+
+  _subProps: function () {
+    return [];
+  }.property(),
+
+  doc: Ember.computed.reads("_root.doc"),
+
+  createInnerAttrs: function () {
+    const tempContent = Ember.get(this, "tempContent");
+    const self = this;
+    const attr = (0,_attr__WEBPACK_IMPORTED_MODULE_1__.default)("_subProps");
+    const keys = [];
+
+    _.forEach(tempContent, function (value, key) {
+      keys.push(key);
+      Ember.defineProperty(self, key, attr());
+    });
+
+    Ember.get(this, "_subProps").addObjects(keys);
+    delete this.tempContent;
+  }.on("init"),
+
+  beforeFn: function () {
+    return [];
+  }.property(),
+  afterFn: function () {
+    return [];
+  }.property(),
+
+  activateListeners: function () {
+    const utils = (0,_utils__WEBPACK_IMPORTED_MODULE_0__.default)(this);
+
+    const beforeFn = utils.beforeAfterChild("Will");
+    const afterFn = utils.beforeAfterChild("Did");
+
+    this.removeListeners();
+
+    this.on("before op", beforeFn);
+    this.on("op", afterFn);
+
+    this.get("beforeFn").push(beforeFn);
+    this.get("afterFn").push(afterFn);
+  }
+    .observes("doc")
+    .on("init"),
+
+  _fullPath(path) {
+    const prefix = Ember.get(this, "_prefix");
+    const idx = Ember.get(this, "_idx");
+
+    if (prefix) {
+      if (idx != null) {
+        return `${prefix}.${idx}.${path}`;
+      }
+      return `${prefix}.${path}`;
+    }
+    return path;
+  },
+
+  deleteProperty(k) {
+    const returnValue = this._super(this._fullPath(k));
+    this.removeKey(k);
+    return returnValue;
+  },
+
+  replaceContent(content, noSet) {
+    this.notifyWillProperties(this.get("_subProps").toArray());
+    const prefix = this.get("_prefix");
+    const idx = this.get("_idx");
+    const path = idx == null ? prefix : `${prefix}.${idx}`;
+
+    if (!noSet) {
+      this._set(path, content);
+    }
+
+    const self = this;
+    const utils = (0,_utils__WEBPACK_IMPORTED_MODULE_0__.default)(this);
+
+    utils.removeChildren(path);
+
+    if (_.isEmpty(Object.keys(this))) {
+      Ember.setProperties(this, { tempContent: content });
+      this.createInnerAttrs();
+
+      const notifyFather = function (prefixArr, keys) {
+        if (_.isEmpty(prefixArr))
+          self.get("_root").notifyPropertyChange(keys.join("."));
+        else {
+          const child = self.get._children[prefixArr.join(".")];
+          if (child != null)
+            child.notifyPropertyChange(
+              `${prefixArr.join(".")}.${keys.join(".")}`
+            );
+          else keys.push(prefixArr.pop());
+          notifyFather(prefixArr, keys);
+        }
+      };
+      const prefixArr = prefix.split(".");
+      const key = prefixArr.pop();
+
+      notifyFather(prefixArr, [key]);
+    } else {
+      let toDelete;
+      if (_.isPlainObject(content)) {
+        toDelete = _.difference(Object.keys(this), Object.keys(content));
+      } else {
+        toDelete = Object.keys(this);
+      }
+
+      _.forEach(toDelete, (prop) => {
+        delete self[prop];
+      });
+      this.get("_subProps").removeObjects(toDelete);
+      Ember.setProperties(this, { tempContent: content });
+      this.createInnerAttrs();
+    }
+    this.notifyDidProperties(this.get("_subProps").toArray());
+
+    return this;
+  },
+
+  toJson() {
+    const idx = Ember.get(this, "_idx");
+    const k = Ember.get(this, "_prefix");
+    const path = idx == null ? k : `${k}.${idx}`;
+    return this.get(`doc.data.${path}`);
+  },
+
+  addKey(key) {
+    const attr = (0,_attr__WEBPACK_IMPORTED_MODULE_1__.default)("_subProps");
+    if (!(this.get("_subProps").indexOf(key) > -1))
+      Ember.defineProperty(this, key, attr());
+    return this;
+  },
+
+  removeKey(key) {
+    const utils = (0,_utils__WEBPACK_IMPORTED_MODULE_0__.default)(this);
+    utils.removeChildren(key, true);
+    this.get("_subProps").removeObject(key);
+    delete this[key];
+    return this;
+  },
+
+  removeListeners() {
+    if (this.has("before op")) {
+      this.off("before op", this.get("beforeFn").pop());
+    }
+    if (this.has("op")) {
+      this.off("op", this.get("afterFn").pop());
+    }
+  },
+}));
+
+
+/***/ }),
+
+/***/ "./lib/ember-share/models/subs-handler.js":
+/*!************************************************!*\
+  !*** ./lib/ember-share/models/subs-handler.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+//
+//   Subs Handler
+//
+//        since we have a recursive model structure there is a need for
+//        creating the subs in a common place and then reuse it in its own class.
+//
+//
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  object: {},
+  array: {},
+});
+
+
+/***/ }),
+
+/***/ "./lib/ember-share/models/use-subs-mixin.js":
+/*!**************************************************!*\
+  !*** ./lib/ember-share/models/use-subs-mixin.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+/* harmony import */ var _subs_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./subs-handler */ "./lib/ember-share/models/subs-handler.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils */ "./lib/ember-share/models/utils.js");
+
+
+
+//
+//   Use Subs Mixin
+//
+//        Used by Base and array (all).
+//
+//
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Ember.Mixin.create({
+  useSubs: function useSubs(content, k, idx) {
+    const utils = (0,_utils__WEBPACK_IMPORTED_MODULE_1__.default)(this);
+
+    if (utils.matchChildToLimitations(k)) return content;
+
+    if (_.isPlainObject(content)) {
+      content = {
+        tempContent: content,
+      };
+      var use = "object";
+    } else if (_.isArray(content)) {
+      content = {
+        content,
+      };
+      var use = "array";
+    }
+    if (use) {
+      let child;
+      let _idx;
+      const path = idx == null ? k : `${k}.${idx}`;
+      let ownPath = Ember.get(this, "_prefix");
+      if ((_idx = Ember.get(this, "_idx")) != null) ownPath += `.${_idx}`;
+      if (path == ownPath) {
+        return this;
+      }
+
+      const children = Ember.get(this, "_children");
+      const childrenKeys = Object.keys(children);
+
+      if (_.includes(childrenKeys, path)) return children[path];
+      child = {};
+
+      let sub = _subs_handler__WEBPACK_IMPORTED_MODULE_0__.default[use].extend({
+        _children: Ember.get(this, "_children"),
+        _prefix: k,
+        _idx: idx,
+        _sdbProps: Ember.get(this, "_sdbProps"),
+        _root: Ember.get(this, "_root"),
+      });
+
+      sub = sub.create(content);
+
+      child[path] = sub;
+      _.assign(Ember.get(this, "_children"), child);
+
+      return sub;
+    }
+    return content;
+  },
+}));
+
+
+/***/ }),
+
+/***/ "./lib/ember-share/models/utils.js":
+/*!*****************************************!*\
+  !*** ./lib/ember-share/models/utils.js ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => /* binding */ f
+/* harmony export */ });
+function f(context) {
+  return {
+    isOpOnArray(op) {
+      return op.ld != null || op.lm != null || op.li != null;
+    },
+
+    matchingPaths(as, bs) {
+      let counter = 0;
+      const higherLength = as.length > bs.length ? as.length : bs.length;
+      while (
+        (as[counter] == "*" || as[counter] == bs[counter]) &&
+        counter < higherLength
+      ) {
+        counter += 1;
+      }
+      return counter - as.length / 1000;
+    },
+
+    matchChildToLimitations(key) {
+      const childLimiations = Ember.get(context, "_root._childLimiations");
+      let prefix = Ember.get(context, "_prefix");
+
+      if (prefix == null || key.match(prefix)) prefix = key;
+      else prefix += `.${key}`;
+
+      prefix = prefix.split(".");
+      const self = this;
+      return _.some(childLimiations, (_limit) => {
+        const limit = _limit.split("/");
+        return (
+          prefix.length == limit.length &&
+          Math.ceil(self.matchingPaths(limit, prefix)) == prefix.length
+        );
+      });
+    },
+
+    prefixToChildLimiations(key) {
+      const childLimiations = Ember.get(context, "_root._childLimiations");
+      let prefix = Ember.get(context, "_prefix");
+
+      if (prefix == null || key.match(prefix)) prefix = key;
+      else prefix += `.${key}`;
+
+      prefix = prefix.split(".");
+      const self = this;
+      let limiationsArray;
+
+      const relevantLimitIndex = this.findMaxIndex(
+        (limiationsArray = _.map(childLimiations, (_limit) => {
+          const limit = _limit.split("/");
+          const result = Math.ceil(self.matchingPaths(limit, prefix));
+          return result < limit.length ? 0 : result;
+        }))
+      );
+      if (relevantLimitIndex >= 0 && limiationsArray[relevantLimitIndex] > 0) {
+        const relevantLimit = childLimiations[relevantLimitIndex].split("/");
+        let orignalPrefix;
+        const result = prefix.slice(
+          0,
+          Math.ceil(self.matchingPaths(relevantLimit, prefix))
+        );
+        if ((orignalPrefix = Ember.get(context, "_prefix"))) {
+          orignalPrefix = orignalPrefix.split(".");
+          return result.slice(orignalPrefix.length).join(".");
+        }
+        return result.join(".");
+      }
+      return key;
+    },
+
+    removeChildren(path, includeSelf) {
+      const children = Ember.get(context, "_children");
+      let childrenKeys = Object.keys(children);
+      const prefix = context.get("_prefix");
+      const utils = this;
+
+      if (prefix != null && path && path.indexOf(prefix) != 0) {
+        path = `${prefix}.${path}`;
+      }
+
+      if (path) {
+        childrenKeys = _.reduce(
+          childrenKeys,
+          (result, key) => {
+            if (key == path) {
+              if (includeSelf) result.push(key);
+            } else if (key.indexOf(path) == 0) result.push(key);
+            return result;
+          },
+          []
+        );
+      }
+
+      _.forEach(childrenKeys, (key) => {
+        children[key].removeListeners();
+        children[key].destroy();
+        delete children[key];
+      });
+    },
+
+    comparePathToPrefix(path, prefix) {
+      return Boolean(
+        Math.ceil(this.matchingPaths(path.split("."), prefix.split(".")))
+      );
+    },
+
+    cutLast(path, op) {
+      let tempPath;
+      if (this.isOpOnArray(op) && !isNaN(+_.last(path))) {
+        tempPath = _.clone(path);
+        tempPath.pop();
+      }
+      return tempPath || path;
+    },
+
+    comparePathToChildren(path, op) {
+      const utils = this;
+      const children = Ember.get(context, "_children");
+      const childrenKeys = Object.keys(children);
+      const hasChildren = _.some(childrenKeys, (childKey) => {
+        const pathsCounter = utils.matchingPaths(
+          childKey.split("."),
+          utils.cutLast(path, op)
+        );
+        return Math.ceil(pathsCounter) == childKey.split(".").length;
+      });
+      return !Ember.isEmpty(childrenKeys) && hasChildren;
+    },
+
+    triggerChildren(didWill, op, isFromClient) {
+      const newP = _.clone(op.p);
+      // var children = Ember.get(context, '_children');
+      const children = context.get("_children");
+      const childrenKeys = Object.keys(children);
+      if (Ember.isEmpty(childrenKeys)) return;
+      let child;
+
+      const utils = this;
+      const counterToChild = _.mapKeys(children, (v, childKey) => {
+        if (utils.isOpOnArray(op) && !isNaN(+_.last(childKey.split("."))))
+          return 0;
+        return utils.matchingPaths(
+          utils.cutLast(childKey.split("."), op),
+          utils.cutLast(op.p, op)
+        );
+      });
+      const toNumber = function f(strings) {
+        return _.map(strings, (s) => +s);
+      };
+      const chosenChild =
+        counterToChild[_.max(toNumber(Object.keys(counterToChild)))];
+      if (didWill == "Will")
+        chosenChild.trigger("before op", [op], isFromClient);
+      if (didWill == "Did") chosenChild.trigger("op", [op], isFromClient);
+    },
+
+    beforeAfter(didWill) {
+      const utils = this;
+      let ex;
+      return function f(ops, isFromClient) {
+        if (!isFromClient) {
+          _.forEach(ops, (op) => {
+            if (utils.comparePathToChildren(op.p, op)) {
+              utils.triggerChildren(didWill, op, isFromClient);
+            } else if (utils.isOpOnArray(op)) {
+              ex = utils.extractArrayPath(op);
+
+              context
+                .get(ex.p)
+                [`arrayContent${didWill}Change`](
+                  ex.idx,
+                  ex.removeAmt,
+                  ex.addAmt
+                );
+            } else {
+              context[`property${didWill}Change`](
+                utils.prefixToChildLimiations(op.p.join("."))
+              );
+            }
+          });
+        }
+      };
+    },
+
+    beforeAfterChild(didWill) {
+      const utils = this;
+      let ex;
+      let prefix;
+      let _idx;
+      return function (ops, isFromClient) {
+        if ((_idx = Ember.get(context, "_idx")) != null || !isFromClient) {
+          _.forEach(ops, (op) => {
+            if (
+              op.p.join(".") == (prefix = Ember.get(context, "_prefix")) &&
+              didWill == "Did"
+            ) {
+              if (op.oi != null) {
+                const content = context.get(`_root.doc.data.${prefix}`);
+                context.replaceContent(content, true);
+              } else if (op.od != null) {
+                const fatherPrefix = prefix.split(".");
+                const key = fatherPrefix.pop();
+                var father;
+                if (
+                  !_.isEmpty(fatherPrefix) &&
+                  (father = context.get(`_children.${fatherPrefix.join(".")}`))
+                )
+                  father.removeKey(key);
+                else context.get("_root").propertyDidChange(prefix);
+              }
+            } else {
+              const path =
+                _idx == null
+                  ? prefix.split(".")
+                  : prefix.split(".").concat(String(_idx));
+              const newP = _.difference(op.p, path);
+              if (utils.comparePathToPrefix(op.p.join("."), prefix)) {
+                if (
+                  utils.isOpOnArray(op) &&
+                  Ember.get(context, "_idx") == null
+                ) {
+                  var newOp = _.clone(op);
+                  newOp.p = newP;
+                  ex = utils.extractArrayPath(newOp);
+
+                  if (ex.p == "")
+                    context[`arrayContent${didWill}Change`](
+                      ex.idx,
+                      ex.removeAmt,
+                      ex.addAmt
+                    );
+                  else
+                    Ember.get(context, ex.p)[`arrayContent${didWill}Change`](
+                      ex.idx,
+                      ex.removeAmt,
+                      ex.addAmt
+                    );
+                } else if (newP.join(".") == "") {
+                  // delete self from father
+                  if (
+                    _.isEmpty(newOp) &&
+                    op.od &&
+                    op.oi == null &&
+                    _.isEqual(op.od, context.toJson())
+                  ) {
+                    const keyToRemove = path.pop();
+                    if (_.isEmpty(path)) {
+                      utils.removeChildren(keyToRemove, true);
+                    } else {
+                      var father = context.get("_children")[path.join(".")];
+                      father.removeKey(keyToRemove);
+                    }
+                  } else {
+                    // context["property" + didWill + "Change"]('content');
+                  }
+                } else {
+                  if (op.oi && op.od == null) {
+                    context.addKey(_.head(newP));
+                  }
+
+                  if (op.od && op.oi == null) {
+                    context.notifyPropertyChange(
+                      utils.prefixToChildLimiations(newP.join("."))
+                    );
+                    if (newP.length === 1) {
+                      context.removeKey(_.head(newP));
+                    }
+                  } else {
+                    context[`property${didWill}Change`](
+                      utils.prefixToChildLimiations(newP.join("."))
+                    );
+                  }
+                }
+              }
+            }
+          });
+        }
+      };
+    },
+
+    findMaxIndex(arr) {
+      return arr.indexOf(_.max(arr));
+    },
+
+    extractArrayPath(op) {
+      return {
+        idx: +_.last(op.p),
+        p: _.slice(op.p, 0, op.p.length - 1).join("."),
+        addAmt: typeof op.li !== "undefined" ? 1 : 0,
+        removeAmt: typeof op.ld !== "undefined" ? 1 : 0,
+      };
+    },
+  };
+}
+
+
+/***/ }),
+
+/***/ "./lib/ember-share/store.js":
+/*!**********************************!*\
+  !*** ./lib/ember-share/store.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils */ "./lib/ember-share/utils.js");
+/* harmony import */ var _inflector_inflector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./inflector/inflector */ "./lib/ember-share/inflector/inflector.js");
+/* global BCSocket:false, sharedb:false */
+
+
+
+let { singularize, pluralize } = _inflector_inflector__WEBPACK_IMPORTED_MODULE_1__.default;
+singularize = singularize.bind(_inflector_inflector__WEBPACK_IMPORTED_MODULE_1__.default);
+pluralize = pluralize.bind(_inflector_inflector__WEBPACK_IMPORTED_MODULE_1__.default);
+const { Promise } = Ember.RSVP;
+const socketReadyState = ["CONNECTING", "OPEN", "CLOSING", "CLOSE"];
+
+const ObjectPromiseProxy = Ember.ObjectProxy.extend(Ember.PromiseProxyMixin);
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Ember.Object.extend(Ember.Evented, {
+  socket: null,
+  connection: null,
+
+  // port: 3000,
+  // url : 'https://qa-e.optibus.co',
+  url: window.location.hostname,
+  init() {
+    const store = this;
+
+    this.checkSocket = function () {
+      return new Promise(function (resolve, reject) {
+        if (store.socket == null) {
+          store.one("connectionOpen", resolve);
+        } else {
+          const checkState = function (state, cb) {
+            switch (state) {
+              case "connected":
+                return resolve();
+              case "connecting":
+                return store.connection.once("connected", resolve);
+              default:
+                cb(state);
+            }
+          };
+          const checkStateFail = function (state) {
+            switch (state) {
+              case "closed":
+                return reject("connection closed");
+              case "disconnected":
+                return reject("connection disconnected");
+              case "stopped":
+                return reject("connection closing");
+            }
+          };
+          let failed = false;
+          checkState(store.connection.state, function (state) {
+            if (failed) checkStateFail(state);
+            else
+              Ember.run.next(this, function () {
+                failed = true;
+                checkState(store.connection.state, checkStateFail);
+              });
+          });
+        }
+      });
+    };
+
+    this.checkConnection = function () {
+      return new Promise(function (resolve, reject) {
+        return store
+          .checkSocket()
+          .then(function () {
+            return resolve();
+            if (store.authentication != null && store.isAuthenticated != null) {
+              if (store.isAuthenticated) return resolve();
+              if (store.isAuthenticating)
+                return store.one("authenticated", resolve);
+              if (!store.isAuthenticated)
+                return store.authentication(store.connection.id);
+              // if (!store.isAuthenticating) return reject()
+              return reject("could not authenticat");
+            }
+            return resolve();
+          })
+          .catch(function (err) {
+            return reject(err);
+          });
+      });
+    };
+
+    this.cache = {};
+    if (!window.sharedb) {
+      throw new Error("sharedb client not included");
+    }
+    if (window.BCSocket === undefined && window.Primus === undefined) {
+      throw new Error("No Socket library included");
+    }
+    if (this.beforeConnect) {
+      this.beforeConnect().then(function () {
+        store.trigger("connect");
+      });
+    } else {
+      store.trigger("connect");
+    }
+  },
+  doConnect: function (options) {
+    const store = this;
+
+    if (window.BCSocket) {
+      this.setProperties(options);
+      this.socket = new BCSocket(this.get("url"), { reconnect: true });
+      this.socket.onerror = function (err) {
+        store.trigger("connectionError", [err]);
+      };
+      this.socket.onopen = function () {
+        store.trigger("connectionOpen");
+      };
+      this.socket.onclose = function () {
+        store.trigger("connectionEnd");
+      };
+    } else if (window.Primus) {
+      (0,_utils__WEBPACK_IMPORTED_MODULE_0__.patchShare)();
+      this.setProperties(options);
+      let hostname = this.get("url");
+      if (this.get("protocol"))
+        hostname = `${this.get("protocol")}://${hostname}`;
+      if (this.get("port")) hostname += `:${this.get("port")}`;
+      else {
+        hostname += `:${80}`;
+      }
+      this.socket = new Primus(hostname, options);
+      // console.log('connection starting');
+
+      this.socket.on("error", function error(err) {
+        store.trigger("connectionError", [err]);
+      });
+      this.socket.on("open", function () {
+        // console.log('connection open');
+        store.trigger("connectionOpen");
+      });
+      this.socket.on("end", function () {
+        store.trigger("connectionEnd");
+      });
+      this.socket.on("close", function () {
+        store.trigger("connectionEnd");
+      });
+    } else {
+      throw new Error("No Socket library included");
+    }
+    const oldHandleMessage = sharedb.Connection.prototype.handleMessage;
+    const oldSend = sharedb.Connection.prototype.send;
+
+    store.on("connectionEnd", function () {
+      // console.log('ending connection');
+      store.isAuthenticated = false;
+    });
+
+    sharedb.Connection.prototype.handleMessage = function (message) {
+      let athenticating;
+      let handleMessageArgs;
+      handleMessageArgs = arguments;
+      // console.log(message.a);
+      const context = this;
+      oldHandleMessage.apply(context, handleMessageArgs);
+      if (
+        message.a === "init" &&
+        typeof message.id === "string" &&
+        message.protocol === 1 &&
+        typeof store.authenticate === "function"
+      ) {
+        store.isAuthenticating = true;
+        return store
+          .authenticate(message.id)
+          .then(function () {
+            console.log("authenticated !");
+            store.isAuthenticating = false;
+            store.isAuthenticated = true;
+            oldHandleMessage.apply(context, handleMessageArgs);
+            store.trigger("authenticated");
+          })
+          .catch(function (err) {
+            store.isAuthenticating = false;
+            // store.socket.end()
+          });
+      }
+    };
+
+    this.connection = new sharedb.Connection(this.socket);
+  }.on("connect"),
+  find(type, id) {
+    type = pluralize(type);
+    const store = this;
+    return this.checkConnection().then(function () {
+      return store.findQuery(type, { _id: id }).then(
+        function (models) {
+          return models[0];
+        },
+        function (err) {
+          return err;
+        }
+      );
+    });
+  },
+  createRecord(type, data) {
+    let ref;
+    let path;
+    path = (ref = this._getPathForType(type)) ? ref : type.pluralize();
+    path = this._getPrefix(type) + path;
+    type = pluralize(type);
+    const store = this;
+    return store.checkConnection().then(function () {
+      const doc = store.connection.get(
+        path,
+        data.id == null ? (0,_utils__WEBPACK_IMPORTED_MODULE_0__.guid)() : data.id
+      );
+      return Promise.all([
+        store.whenReady(doc).then(function (doc) {
+          return store.create(doc, data);
+        }),
+        store.subscribe(doc),
+      ]).then(function () {
+        const model = store._createModel(type, doc);
+        store._cacheFor(type).addObject(model);
+        return model;
+      });
+    });
+  },
+  deleteRecord(type, id) {
+    const cache = this._cacheFor(pluralize(type));
+    const model = cache.findBy("id", id);
+    const doc = model.get("doc");
+    return new Promise(function (resolve, reject) {
+      doc.del(function (err) {
+        if (err != null) reject(err);
+        else {
+          resolve();
+        }
+      });
+    });
+  },
+  findAndSubscribeQuery(type, query) {
+    type = pluralize(type);
+    const store = this;
+    const prefix = this._getPrefix(type);
+    // store.cache[type] = []
+
+    return this.checkConnection().then(function () {
+      return new Promise(function (resolve, reject) {
+        let fetchedResult;
+        let _query;
+        function fetchQueryCallback(err, results, extra) {
+          if (err !== null) {
+            return reject(err);
+          }
+          resolve(
+            store._resolveModels(type, results).then(function (models) {
+              fetchedResult = models;
+              return { models, query: _query };
+            })
+          );
+        }
+        _query = store.connection.createSubscribeQuery(
+          prefix + type,
+          query,
+          null,
+          fetchQueryCallback
+        );
+        _query.on("insert", function (docs) {
+          store._resolveModels(type, docs).then(function (models) {
+            return fetchedResult.addObjects(models);
+          });
+        });
+        _query.on("remove", function (docs) {
+          store._resolveModels(type, docs).then(function (models) {
+            _.forEach(models, function (model) {
+              store.unload(type, model);
+            });
+            return fetchedResult.removeObjects(models);
+          });
+        });
+      });
+    });
+  },
+  findRecord(type, id) {
+    const store = this;
+    const cache = store.cache[pluralize(type)];
+    return ObjectPromiseProxy.create({
+      promise: new Promise(function (resolve, reject) {
+        try {
+          var cachedRecordAvailable =
+            cache[0].doc.id == id && cache.length == 1;
+        } catch (e) {}
+        if (cachedRecordAvailable) {
+          resolve(cache[0]);
+        } else {
+          store
+            .findQuery(type, { _id: id })
+            .then(function (results) {
+              resolve(results[0]);
+            })
+            .catch(function (err) {
+              reject(err);
+            });
+        }
+      }),
+    });
+    // return new Promise(function (resolve, reject){
+    //   try {
+    //     var cachedRecordAvailable = cache[0].doc.id == id && cache.length == 1
+    //   } catch (e) { }
+    //   if (cachedRecordAvailable) {
+    //     resolve(cache[0])
+    //   } else {
+    //     store.findQuery(type, {_id: id})
+    //       .then(function(results){
+    //         resolve(results[0])
+    //       })
+    //       .catch(function (err){
+    //         reject(err)
+    //       });
+    //   }
+    // })
+  },
+  findQuery(type, query) {
+    // type = pluralize(type)
+    let ref;
+    let path;
+    path = (ref = this._getPathForType(type)) ? ref : pluralize(type);
+    path = this._getPrefix(type) + path;
+    const store = this;
+    // store.cache[pluralize(type)] = []
+    return this.checkConnection().then(function () {
+      return new Promise(function (resolve, reject) {
+        function fetchQueryCallback(err, results, extra) {
+          if (err !== null) {
+            return reject(err);
+          }
+          resolve(store._resolveModels(type, results));
+        }
+        store.connection.createFetchQuery(
+          path,
+          query,
+          null,
+          fetchQueryCallback
+        );
+      });
+    });
+  },
+  findAll(type, query) {
+    type = pluralize(type);
+    throw new Error("findAll not implemented");
+    // TODO this.connection subscribe style query
+  },
+  _cacheFor(type) {
+    type = pluralize(type);
+    let cache = this.cache[type];
+    if (cache === undefined) {
+      this.cache[type] = cache = [];
+    }
+    return cache;
+  },
+  _getPathForType(type) {
+    const Adapter = Ember.getOwner(this).lookup(`adapter:${singularize(type)}`);
+    if (Adapter && Adapter.pathForType) return Adapter.pathForType(type);
+  },
+  _getPrefix(type) {
+    const Adapter = Ember.getOwner(this).lookup(`adapter:${singularize(type)}`);
+    let prefix;
+    if (Adapter) prefix = Adapter.get("prefix");
+    if (!prefix) prefix = "";
+    return prefix;
+  },
+  _factoryFor(type) {
+    let ref;
+    const modelStr = (ref = this.get("modelStr")) ? ref : "model-sdb";
+    return Ember.getOwner(this).factoryFor(`${modelStr}:${singularize(type)}`);
+  },
+  _createModel(type, doc) {
+    const modelClass = this._factoryFor(type);
+    if (modelClass) {
+      return modelClass.create({
+        doc,
+        _type: pluralize(type),
+        _store: this,
+      });
+    }
+    throw new Error(`Cannot find model for ${type}`);
+  },
+  _resolveModel(type, doc) {
+    const cache = this._cacheFor(pluralize(type));
+    const id = Ember.get(doc, "id") || Ember.get(doc, "_id");
+    const model = cache.findBy("id", id);
+    if (model !== undefined) {
+      return Promise.resolve(model);
+    }
+    const store = this;
+    return store.subscribe(doc).then(function (doc) {
+      return store._createModel(type, doc);
+    });
+  },
+  _resolveModels(type, docs) {
+    // type = pluralize(type)
+    const store = this;
+    const cache = this._cacheFor(pluralize(type));
+    const models = [];
+    const promises = [];
+    for (let i = 0; i < docs.length; i++) {
+      const doc = docs[i];
+      const model = cache.findBy("id", doc.id);
+      if (model) {
+        models.push(model);
+      } else {
+        promises.push(this._resolveModel(type, doc));
+      }
+    }
+    return new Promise(function (resolve, reject) {
+      if (!Ember.isEmpty(promises)) {
+        Promise.all(promises)
+          .then(function (resolvedModels) {
+            cache.addObjects(resolvedModels);
+            resolve(models.concat(resolvedModels));
+          })
+          .catch(function (err) {
+            reject(err);
+          });
+      } else {
+        resolve(models);
+      }
+    });
+    // return Promise.all(cache);
+  },
+  /* returns Promise for when sharedb doc is ready */
+  whenReady(doc) {
+    if (doc.state === "ready") {
+      return Promise.resolve(doc);
+    }
+    return new Promise(function (resolve, reject) {
+      doc.on("load", function () {
+        Ember.run(null, resolve, doc);
+      });
+    });
+  },
+  unloadRecord(doc, cb) {
+    const cache = this.cache[doc.get("_type")];
+    doc.get("doc").destroy(() => {
+      cache.removeObject(doc);
+      doc.destroy();
+      if (typeof cb === "function") return cb();
+    });
+    return this;
+  },
+  unload(type, doc) {
+    type = pluralize(type);
+    const cache = this._cacheFor(type);
+    try {
+      doc.get("doc").destroy(() => {
+        cache.removeObject(doc);
+        doc.destroy();
+      });
+    } catch (e) {}
+    doc.destroy();
+    cache.removeObject(doc);
+  },
+  unloadAll(type) {
+    return new Promise((resolve, reject) => {
+      const cache = this.cache[pluralize(type)] || [];
+      const promises = cache.map((doc) => {
+        return new Promise((resolve) => {
+          doc.get("doc").destroy(() => {
+            doc.destroy();
+            resolve();
+          });
+        });
+      });
+      return Promise.all(promises)
+        .then(() => {
+          cache.removeObjects(cache);
+          resolve();
+        })
+        .catch(reject);
+    });
+  },
+  peekAll(type) {
+    type = pluralize(type);
+    return this._cacheFor(type);
+  },
+  /* returns Promise for when sharedb doc is subscribed */
+  subscribe(doc) {
+    if (doc.subscribed) {
+      return Promise.resolve(doc);
+    }
+    return new Promise(function (resolve, reject) {
+      doc.subscribe(function (err) {
+        if (err === undefined) {
+          Ember.run(null, resolve, doc);
+        } else {
+          Ember.run(null, reject, err);
+        }
+      });
+    });
+  },
+  /* returns Promise for when sharedb json0 type doc is created */
+  create(doc, data) {
+    return new Promise(function (resolve, reject) {
+      doc.create(data, "json0", function (err) {
+        if (err === undefined) {
+          Ember.run(null, resolve, doc);
+        } else {
+          Ember.run(null, reject, err);
+        }
+      });
+    });
+  },
+}));
+
+
+/***/ }),
+
+/***/ "./lib/ember-share/utils.js":
+/*!**********************************!*\
+  !*** ./lib/ember-share/utils.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "guid": () => /* binding */ guid,
+/* harmony export */   "diff": () => /* binding */ diff,
+/* harmony export */   "isArray": () => /* binding */ isArray,
+/* harmony export */   "patchShare": () => /* binding */ patchShare
+/* harmony export */ });
+function guid() {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 3) | 8;
+    return v.toString(16);
+  });
+}
+
+/*
+ * Software License Agreement (BSD License)
+ *
+ * Copyright (c) 2009-2011, Kevin Decker kpdecker@gmail.com
+ *
+ * Text diff implementation.
+ *
+ * This library supports the following APIS:
+ * JsDiff.diffChars: Character by character diff
+ * JsDiff.diffWords: Word (as defined by \b regex) diff which ignores whitespace
+ * JsDiff.diffLines: Line based diff
+ *
+ * JsDiff.diffCss: Diff targeted at CSS content
+ *
+ * These methods are based on the implementation proposed in
+ * "An O(ND) Difference Algorithm and its Variations" (Myers, 1986).
+ * http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.4.6927
+ * All rights reserved.
+ */
+function clonePath(path) {
+  return { newPos: path.newPos, components: path.components.slice(0) };
+}
+const fbDiff = function (ignoreWhitespace) {
+  this.ignoreWhitespace = ignoreWhitespace;
+};
+fbDiff.prototype = {
+  diff(oldString, newString) {
+    // Handle the identity case (this is due to unrolling editLength == 0
+    if (newString === oldString) {
+      return [{ value: newString }];
+    }
+    if (!newString) {
+      return [{ value: oldString, removed: true }];
+    }
+    if (!oldString) {
+      return [{ value: newString, added: true }];
+    }
+
+    newString = this.tokenize(newString);
+    oldString = this.tokenize(oldString);
+
+    const newLen = newString.length;
+    const oldLen = oldString.length;
+    const maxEditLength = newLen + oldLen;
+    const bestPath = [{ newPos: -1, components: [] }];
+
+    // Seed editLength = 0
+    let oldPos = this.extractCommon(bestPath[0], newString, oldString, 0);
+    if (bestPath[0].newPos + 1 >= newLen && oldPos + 1 >= oldLen) {
+      return bestPath[0].components;
+    }
+
+    for (let editLength = 1; editLength <= maxEditLength; editLength++) {
+      for (
+        let diagonalPath = -1 * editLength;
+        diagonalPath <= editLength;
+        diagonalPath += 2
+      ) {
+        var basePath;
+        const addPath = bestPath[diagonalPath - 1];
+        const removePath = bestPath[diagonalPath + 1];
+        oldPos = (removePath ? removePath.newPos : 0) - diagonalPath;
+        if (addPath) {
+          // No one else is going to attempt to use this value, clear it
+          bestPath[diagonalPath - 1] = undefined;
+        }
+
+        const canAdd = addPath && addPath.newPos + 1 < newLen;
+        const canRemove = removePath && oldPos >= 0 && oldPos < oldLen;
+        if (!canAdd && !canRemove) {
+          bestPath[diagonalPath] = undefined;
+          continue;
+        }
+
+        // Select the diagonal that we want to branch from. We select the prior
+        // path whose position in the new string is the farthest from the origin
+        // and does not pass the bounds of the diff graph
+        if (!canAdd || (canRemove && addPath.newPos < removePath.newPos)) {
+          basePath = clonePath(removePath);
+          this.pushComponent(
+            basePath.components,
+            oldString[oldPos],
+            undefined,
+            true
+          );
+        } else {
+          basePath = clonePath(addPath);
+          basePath.newPos++;
+          this.pushComponent(
+            basePath.components,
+            newString[basePath.newPos],
+            true,
+            undefined
+          );
+        }
+
+        oldPos = this.extractCommon(
+          basePath,
+          newString,
+          oldString,
+          diagonalPath
+        );
+
+        if (basePath.newPos + 1 >= newLen && oldPos + 1 >= oldLen) {
+          return basePath.components;
+        }
+        bestPath[diagonalPath] = basePath;
+      }
+    }
+  },
+
+  pushComponent(components, value, added, removed) {
+    const last = components[components.length - 1];
+    if (last && last.added === added && last.removed === removed) {
+      // We need to clone here as the component clone operation is just
+      // as shallow array clone
+      components[components.length - 1] = {
+        value: this.join(last.value, value),
+        added,
+        removed,
+      };
+    } else {
+      components.push({ value, added, removed });
+    }
+  },
+  extractCommon(basePath, newString, oldString, diagonalPath) {
+    const newLen = newString.length;
+    const oldLen = oldString.length;
+    let { newPos } = basePath;
+    let oldPos = newPos - diagonalPath;
+    while (
+      newPos + 1 < newLen &&
+      oldPos + 1 < oldLen &&
+      this.equals(newString[newPos + 1], oldString[oldPos + 1])
+    ) {
+      newPos++;
+      oldPos++;
+
+      this.pushComponent(
+        basePath.components,
+        newString[newPos],
+        undefined,
+        undefined
+      );
+    }
+    basePath.newPos = newPos;
+    return oldPos;
+  },
+
+  equals(left, right) {
+    const reWhitespace = /\S/;
+    if (
+      this.ignoreWhitespace &&
+      !reWhitespace.test(left) &&
+      !reWhitespace.test(right)
+    ) {
+      return true;
+    }
+    return left === right;
+  },
+  join(left, right) {
+    return left + right;
+  },
+  tokenize(value) {
+    return value;
+  },
+};
+// copied from https://github.com/Dignifiedquire/share-primus/blob/master/lib/client/share-primus.js
+function patchShare() {
+  // Map Primus ready states to ShareJS ready states.
+  const STATES = {};
+  STATES[window.Primus.CLOSED] = "disconnected";
+  STATES[window.Primus.OPENING] = "connecting";
+  STATES[window.Primus.OPEN] = "connected";
+
+  // Override Connection's bindToSocket method with an implementation
+  // that understands Primus Stream.
+  window.sharedb.Connection.prototype.bindToSocket = function (stream) {
+    const connection = this;
+    this.state =
+      stream.readyState === 0 || stream.readyState === 1
+        ? "connecting"
+        : "disconnected";
+
+    setState(Primus.OPENING);
+    setState(stream.readyState);
+    this.canSend = this.state === "connected"; // Primus can't send in connecting state.
+
+    // Tiny facade so Connection can still send() messages.
+    this.socket = {
+      send(msg) {
+        stream.write(msg);
+      },
+    };
+
+    stream.on("data", function (msg) {
+      if (msg.a) {
+        try {
+          connection.handleMessage(msg);
+        } catch (e) {
+          connection.emit("error", e);
+          throw e;
+        }
+      }
+    });
+
+    stream.on("readyStateChange", function () {
+      // console.log(stream.readyState);
+      setState(stream.readyState);
+    });
+
+    stream.on("reconnecting", function () {
+      if (connection.state === "disconnected") {
+        setState(Primus.OPENING);
+        connection.canSend = false;
+      }
+    });
+
+    function setState(readyState) {
+      const shareState = STATES[readyState];
+      connection._setState(shareState);
+    }
+  };
+}
+const isArray =
+  Array.isArray ||
+  function (obj) {
+    return obj instanceof Array;
+  };
+const diff = new fbDiff(false);
+
+
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		if(__webpack_module_cache__[moduleId]) {
+/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop)
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+/******/ 	// module exports must be returned from runtime so entry inlining is disabled
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__("./lib/ember-share.js");
+/******/ })()
+;
+});
+//# sourceMappingURL=main.js.map
