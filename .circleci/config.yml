@@ -5,9 +5,24 @@ jobs:
       - image: cimg/node:lts-browsers
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
       - run: npm install
-      - run: npm run test:headless
+      - run: npm run test:webpack
+      - run: npm run test:headless-report
+      - run:
+          command: |-
+              sudo mkdir /test_results
+              sudo chown circleci:circleci /test_results
+              mkdir /test_results/ember-share/
+              cp ./report.xml /test_results/ember-share/
+          name: Creating results folder
       - store_test_results:
-          path: './results.json'
+          path: '/test_results'
       - store_artifacts:
-          path: './results.json'
+          path: '/test_results'
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}

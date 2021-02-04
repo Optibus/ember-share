@@ -33,6 +33,7 @@
     "build": "DEVELOPMENT=true npx webpack --config webpack-app.config.js",
     "dev": "DEVELOPMENT=true npx webpack --config webpack-app.config.js",
     "test:headless": "node headles-runner.js",
+    "test:headless-report": "REPORT=true node headles-runner.js  | grep '<'  > report.xml",
     "test:webpack": "npx webpack --config webpack-test.config.js",
     "eslint:lib": "npx eslint lib",
     "eslint:test": "npx eslint test/js"
