@@ -69,7 +69,7 @@ module.exports = (() => {
     },
 
     minify(origCode) {
-      return uglifyJs.minify(origCode, { fromString: true }).code;
+      return uglifyJs.minify(origCode).code;
     },
   };
 })();
