@@ -1,9 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 import { assert } from "chai";
 import _ from "lodash";
 import modelData from "./mock-model/cson";
@@ -472,6 +466,46 @@ const test = () => {
         assert.isDefined(schedule.doc.data.events.stand_by.id_2);
         assert.isDefined(schedule.get("events.stand_by.id_2"));
         assert.isUndefined(schedule.get("events.stand_by.id_1"));
+      });
+    });
+
+    it("subprops insertion are notified properly if the object was previously empty", () => {
+      schedule.get("events.service_trip.id_1");
+      schedule.get("events.stand_by.id_1");
+      const op = {
+        p: ["events"],
+        od: {
+          service_trip: {
+            id_1: {
+              name: "3",
+            },
+          },
+          stand_by: {
+            id_1: {
+              name: "1",
+            },
+            id_2: {
+              name: "2",
+            },
+          },
+        },
+        oi: 1,
+      };
+      return postJson("op/", createDataOp(op), 10).then((response) => {
+        assert.equal(response.msg, "Success");
+        assert.deepEqual(schedule.doc.data.events, {});
+        assert.equal(schedule.get("events.service_trip"), undefined);
+        op.oi = op.od;
+        op.od = 1;
+        return postJson("op/", createDataOp(op), 10).then((response) => {
+          assert.equal(response.msg, "Success");
+          assert.deepEqual(
+            schedule.doc.data.events.service_trip,
+            op.oi.service_trip
+          );
+          assert.isDefined(schedule.get("events.service_trip"));
+          assert.isDefined(schedule.get("events.stand_by"));
+        });
       });
     });
   });

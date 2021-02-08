@@ -32,6 +32,11 @@ module.exports = {
 
       app.post("/op", function f(req, res) {
         const { id, op, collection } = req.body;
+
+        // workaround for empty object properties being removed from the request body. Please fix it if you know how
+        if (op.oi === '1') op.oi = {};
+        if (op.od === '1') op.od = {};
+
         const doc = SDBConnection.get(collection, id);
         doc.fetch((err) => {
           if (err) {
