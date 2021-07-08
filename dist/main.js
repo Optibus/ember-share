@@ -1875,9 +1875,12 @@ const ObjectPromiseProxy = Ember.ObjectProxy.extend(Ember.PromiseProxyMixin);
     if (window.BCSocket === undefined && window.Primus === undefined) {
       throw new Error("No Socket library included");
     }
-    if (this.beforeConnect) {
-      this.beforeConnect().then(function () {
-        store.trigger("connect");
+    if ( this.beforeConnect )
+    {
+      this.beforeConnect()
+      .then(function(authArgs /* { authToken, customer } */){
+        if (authArgs?.authToken && authArgs?.customer) store.setProperties(authArgs);
+        store.trigger('connect');
       });
     } else {
       store.trigger("connect");
@@ -1901,13 +1904,12 @@ const ObjectPromiseProxy = Ember.ObjectProxy.extend(Ember.PromiseProxyMixin);
     } else if (window.Primus) {
       (0,_utils__WEBPACK_IMPORTED_MODULE_0__.patchShare)();
       this.setProperties(options);
-      let hostname = this.get("url");
-      if (this.get("protocol"))
-        hostname = `${this.get("protocol")}://${hostname}`;
-      if (this.get("port")) hostname += `:${this.get("port")}`;
-      else {
-        hostname += `:${80}`;
-      }
+      var hostname = this.get('url');
+      if (this.get('protocol'))
+        hostname = this.get('protocol') + '://' + hostname;
+      hostname += ':' + (this.get('port') ?? 80);
+      const authToken = this.get('authToken');
+      hostname += authToken ? `?authorization=${authToken}&customer=${this.get('customer')}` : '';
       this.socket = new Primus(hostname, options);
       // console.log('connection starting');
 
