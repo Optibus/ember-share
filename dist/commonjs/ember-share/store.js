@@ -57,11 +57,14 @@ exports["default"] = Ember.Object.extend(Ember.Evented, {
             var numberOfFails = 0;
             var checkStateRecursivly = function(state){
               numberOfFails += 1;
-              if (numberOfFails === MAX_NUMBER_OF_FAILS)
+              if (numberOfFails === MAX_NUMBER_OF_FAILS) {
+                console.log('Sharedb connection check: number of failures above max')
                 checkStateFail(state)
+              }
               else {
                 if (numberOfFails === 1) {
                   // Force reconnection on first fail
+                  console.log('Sharedb force reconnection')
                   store.socket.end()
                   store.socket.open()
                 }
@@ -71,7 +74,12 @@ exports["default"] = Ember.Object.extend(Ember.Evented, {
               }
             }
 
-            checkState(store.connection.state, checkStateRecursivly)
+            try {
+              checkState(store.connection.state, checkStateRecursivly)
+            } catch(err) {
+              console.error('Ember share - connection check state failed:', err)
+              reject('Ember share - connection check state failed:', err)
+            }
         }
       });
     }
